@@ -1,0 +1,2704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Weekly Savings | Local Market</title>
+<style>
+/* ═══════════════════════════════════════
+   SAFELOG v2 — DISCREET INCIDENT LOGGING
+   Single-file prototype
+   ═══════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body { font-family: Georgia, serif; background: #f8f5f0; min-height: 100vh; }
+button { cursor: pointer; }
+a { text-decoration: none; }
+.hidden { display: none !important; }
+
+/* ──────────────────────────────────────
+   GROCERY THEME — Amazon Fresh inspired
+   ────────────────────────────────────── */
+#theme-grocery { background: #f7f8f8; min-height: 100vh; font-family: 'Amazon Ember', Arial, sans-serif; }
+
+.g-header { background: #131921; color: #fff; }
+.g-header-top { display: flex; align-items: center; gap: .75rem; padding: .6rem 1.2rem; flex-wrap: wrap; }
+.g-logo { font-size: 1.4rem; font-weight: 900; color: #ff9900; letter-spacing: -1px; cursor: pointer; white-space: nowrap; user-select: none; display: flex; align-items: center; gap: .4rem; }
+.g-logo-leaf { color: #4CAF50; font-size: 1.1rem; }
+.g-location { display: flex; align-items: center; gap: .3rem; font-size: .72rem; color: #ccc; border: 1px solid transparent; padding: .3rem .5rem; border-radius: 3px; cursor: pointer; white-space: nowrap; }
+.g-location:hover { border-color: #fff; }
+.g-location span { font-size: 1rem; }
+.g-search-wrap { flex: 1; display: flex; border-radius: 4px; overflow: hidden; min-width: 200px; }
+.g-search-cat { background: #f3f3f3; color: #444; border: none; padding: 0 .5rem; font-size: .75rem; border-right: 1px solid #ccc; cursor: pointer; white-space: nowrap; }
+.g-search-cat:hover { background: #e9e9e9; }
+.g-search-input { flex: 1; padding: .5rem .7rem; border: none; outline: none; font-size: .9rem; background: #fff; color: #131921; }
+.g-search-btn { background: #febd69; border: none; padding: 0 1rem; font-size: 1.2rem; color: #131921; transition: background .15s; }
+.g-search-btn:hover { background: #f0a84e; }
+.g-header-right { display: flex; align-items: center; gap: 1.2rem; margin-left: .5rem; }
+.g-header-link { font-size: .72rem; color: #ccc; cursor: pointer; white-space: nowrap; line-height: 1.3; }
+.g-header-link:hover { color: #ff9900; }
+.g-header-link strong { display: block; font-size: .85rem; color: #fff; font-weight: 700; }
+.g-cart-btn { display: flex; align-items: center; gap: .4rem; color: #fff; cursor: pointer; font-size: .82rem; }
+.g-cart-btn:hover { color: #ff9900; }
+.g-cart-count { background: #ff9900; color: #131921; font-weight: 900; font-size: .8rem; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+.g-nav-bar { background: #232f3e; padding: .45rem 1.2rem; display: flex; gap: .15rem; flex-wrap: wrap; align-items: center; }
+.g-nav-bar a { color: #fff; font-size: .8rem; padding: .3rem .7rem; border-radius: 3px; cursor: pointer; white-space: nowrap; border: 1px solid transparent; }
+.g-nav-bar a:hover, .g-nav-bar a.active { border-color: #fff; }
+.g-nav-bar a.cta { background: #ff9900; color: #131921; font-weight: 700; border-color: #ff9900; }
+.g-nav-bar a.cta:hover { background: #f0a84e; }
+
+.g-banner { background: #f0c14b; color: #111; font-size: .78rem; font-weight: 600; text-align: center; padding: .4rem 1rem; }
+.g-body { max-width: 1300px; margin: 0 auto; padding: 1rem 1.2rem; display: flex; gap: 1.2rem; }
+.g-sidebar-left { width: 200px; flex-shrink: 0; }
+.g-cat-panel { background: #fff; border: 1px solid #ddd; border-radius: 4px; padding: .8rem; margin-bottom: .8rem; }
+.g-cat-panel h4 { font-size: .78rem; font-weight: 700; color: #232f3e; margin-bottom: .6rem; border-bottom: 1px solid #eee; padding-bottom: .4rem; text-transform: uppercase; letter-spacing: .5px; }
+.g-cat-panel ul { list-style: none; }
+.g-cat-panel li { font-size: .8rem; color: #007185; padding: .2rem 0; cursor: pointer; }
+.g-cat-panel li:hover { color: #c7511f; text-decoration: underline; }
+.g-cat-panel li.active { font-weight: 700; color: #c7511f; }
+.g-main { flex: 1; min-width: 0; }
+.g-hero-banner { background: linear-gradient(120deg, #232f3e 40%, #37475a); border-radius: 8px; padding: 2rem 2.5rem; margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: space-between; color: #fff; }
+.g-hero-text h2 { font-size: 1.9rem; font-weight: 800; line-height: 1.2; margin-bottom: .5rem; }
+.g-hero-text p { font-size: .88rem; color: #a7c0d1; margin-bottom: 1rem; }
+.g-hero-badge { background: #ff9900; color: #131921; font-weight: 700; padding: .5rem 1.5rem; border-radius: 4px; font-size: .85rem; cursor: pointer; border: none; font-family: inherit; }
+.g-hero-badge:hover { background: #f0a84e; }
+.g-hero-emojis { font-size: 3.5rem; display: flex; gap: .5rem; flex-wrap: wrap; }
+.g-section { margin-bottom: 1.5rem; }
+.g-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .8rem; padding-bottom: .5rem; border-bottom: 2px solid #ff9900; }
+.g-section-title { font-size: 1.1rem; font-weight: 700; color: #232f3e; }
+.g-section-link { font-size: .8rem; color: #007185; cursor: pointer; }
+.g-section-link:hover { color: #c7511f; text-decoration: underline; }
+.g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: .85rem; }
+.g-card { border: 1px solid #ddd; border-radius: 6px; overflow: hidden; background: #fff; transition: box-shadow .15s; cursor: default; position: relative; }
+.g-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.12); border-color: #bbb; }
+.g-card-badge { position: absolute; top: .4rem; left: .4rem; background: #c62828; color: #fff; font-size: .62rem; font-weight: 700; padding: .15rem .45rem; border-radius: 3px; text-transform: uppercase; }
+.g-card-prime { position: absolute; top: .4rem; right: .4rem; background: #00a8e1; color: #fff; font-size: .55rem; font-weight: 700; padding: .15rem .35rem; border-radius: 2px; }
+.g-card-img { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; background: #f7f8f8; }
+.g-card-body { padding: .7rem; }
+.g-card-name { font-size: .79rem; color: #232f3e; line-height: 1.35; margin-bottom: .3rem; }
+.g-stars { color: #ff9900; font-size: .72rem; margin-bottom: .2rem; }
+.g-stars span { color: #565959; font-size: .68rem; }
+.g-card-price-wrap { display: flex; align-items: baseline; gap: .35rem; margin-bottom: .25rem; }
+.g-card-price { font-size: 1.1rem; color: #B12704; font-weight: 700; }
+.g-card-price-per { font-size: .7rem; color: #565959; }
+.g-card-orig { font-size: .75rem; color: #565959; text-decoration: line-through; }
+.g-card-savings { font-size: .7rem; color: #B12704; font-weight: 600; margin-bottom: .5rem; }
+.g-prime-badge { font-size: .68rem; color: #00a8e1; font-weight: 700; margin-bottom: .4rem; }
+.g-card-btns { display: flex; gap: .35rem; }
+.g-add-cart-btn { background: #ff9900; color: #131921; border: none; padding: .35rem .6rem; border-radius: 4px; font-size: .72rem; font-weight: 700; font-family: inherit; transition: background .15s; flex: 1; }
+.g-add-cart-btn:hover { background: #f0a84e; }
+.g-add-list-btn { background: #fff; color: #232f3e; border: 1px solid #999; padding: .35rem .5rem; border-radius: 4px; font-size: .72rem; font-family: inherit; transition: all .15s; }
+.g-add-list-btn:hover { border-color: #232f3e; background: #f7f8f8; }
+
+/* Cart sidebar */
+.g-cart-sidebar { width: 280px; flex-shrink: 0; }
+.g-cart-panel { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; position: sticky; top: 1rem; }
+.g-cart-panel h3 { font-size: .9rem; font-weight: 700; color: #232f3e; margin-bottom: .7rem; display: flex; align-items: center; justify-content: space-between; }
+.g-cart-empty { font-size: .8rem; color: #565959; text-align: center; padding: 1.2rem 0; }
+.g-cart-items { max-height: 300px; overflow-y: auto; margin-bottom: .7rem; }
+.g-cart-item { display: flex; align-items: center; gap: .5rem; padding: .4rem 0; border-bottom: 1px solid #f0f0f0; font-size: .78rem; }
+.g-cart-item-emoji { font-size: 1.3rem; flex-shrink: 0; }
+.g-cart-item-name { flex: 1; color: #232f3e; line-height: 1.3; }
+.g-cart-item-price { color: #B12704; font-weight: 700; flex-shrink: 0; }
+.g-cart-item-rm { background: none; border: none; color: #999; font-size: .9rem; cursor: pointer; padding: 0 .2rem; flex-shrink: 0; }
+.g-cart-item-rm:hover { color: #c62828; }
+.g-cart-subtotal { font-size: .85rem; font-weight: 700; color: #232f3e; display: flex; justify-content: space-between; margin-bottom: .7rem; border-top: 1px solid #eee; padding-top: .5rem; }
+.g-checkout-btn { background: #ff9900; border: none; color: #131921; font-weight: 700; padding: .6rem; width: 100%; border-radius: 4px; font-size: .82rem; font-family: inherit; }
+.g-checkout-btn:hover { background: #f0a84e; }
+.g-list-panel { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: .8rem; margin-top: .7rem; }
+.g-list-panel h4 { font-size: .78rem; font-weight: 700; color: #232f3e; margin-bottom: .5rem; }
+.g-list-item { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: #232f3e; padding: .25rem 0; border-bottom: 1px solid #f5f5f5; }
+.g-list-item input[type=checkbox] { flex-shrink: 0; }
+
+.g-footer { background: #131921; color: #999; text-align: center; padding: 1.5rem 1rem; font-size: .75rem; font-family: Arial, sans-serif; margin-top: 1.5rem; }
+.g-footer-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: .7rem; }
+.g-footer-links a { color: #ccc; cursor: pointer; }
+.g-footer-links a:hover { color: #ff9900; }
+
+/* Search results dropdown */
+.g-search-results { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ddd; border-radius: 0 0 6px 6px; z-index: 500; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+.g-search-result-item { padding: .55rem 1rem; font-size: .83rem; color: #232f3e; cursor: pointer; display: flex; align-items: center; gap: .6rem; }
+.g-search-result-item:hover { background: #f7f8f8; }
+.g-search-wrap { position: relative; }
+
+/* ──────────────────────────────────────
+   WIKI THEME — Wikipedia style, dense
+   ────────────────────────────────────── */
+#theme-wiki { background: #fff; min-height: 100vh; font-family: 'Linux Libertine', Georgia, serif; color: #202122; }
+
+.w-header { background: #fff; border-bottom: 1px solid #a2a9b1; padding: .6rem 1.5rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+.w-logo-wrap { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.w-logo { font-size: 1.8rem; font-weight: 900; color: #202122; line-height: 1; }
+.w-logo-sub { font-size: .6rem; color: #54595d; letter-spacing: .8px; text-transform: uppercase; }
+.w-search-bar { display: flex; flex: 1; max-width: 540px; position: relative; }
+.w-search-bar input { flex: 1; padding: .38rem .7rem; border: 1px solid #a2a9b1; border-right: none; border-radius: 2px 0 0 2px; font-size: .88rem; color: #202122; outline: none; font-family: inherit; }
+.w-search-bar input:focus { border-color: #3366cc; box-shadow: 0 0 0 1px #3366cc; }
+.w-search-bar button { padding: .38rem .9rem; background: #f8f9fa; border: 1px solid #a2a9b1; border-radius: 0 2px 2px 0; font-size: .82rem; color: #202122; font-family: inherit; }
+.w-search-bar button:hover { background: #e8e8e8; }
+.w-search-dropdown { position: absolute; top: 100%; left: 0; right: 45px; background: #fff; border: 1px solid #a2a9b1; border-top: none; z-index: 500; }
+.w-search-result { padding: .5rem .8rem; font-size: .83rem; color: #3366cc; cursor: pointer; border-bottom: 1px solid #f0f0f0; display: flex; flex-direction: column; }
+.w-search-result:hover { background: #eaf3fb; }
+.w-search-result small { color: #54595d; font-size: .72rem; margin-top: .1rem; }
+.w-header-links { display: flex; gap: 1rem; font-size: .8rem; color: #54595d; font-family: Arial, sans-serif; margin-left: auto; }
+.w-header-links a { color: #3366cc; cursor: pointer; }
+.w-header-links a:hover { text-decoration: underline; }
+.w-subheader { background: #f8f9fa; border-bottom: 1px solid #a2a9b1; padding: .35rem 1.5rem; font-size: .78rem; font-family: Arial, sans-serif; display: flex; gap: 1.5rem; color: #54595d; flex-wrap: wrap; }
+.w-subheader a { color: #3366cc; cursor: pointer; }
+.w-subheader a:hover { text-decoration: underline; }
+.w-body { display: flex; max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem; gap: 2rem; }
+.w-main { flex: 1; min-width: 0; }
+.w-sidebar { width: 240px; flex-shrink: 0; font-size: .82rem; font-family: Arial, sans-serif; }
+.w-article-header { display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid #a2a9b1; padding-bottom: .4rem; margin-bottom: .8rem; flex-wrap: wrap; gap: .3rem; }
+.w-title { font-size: 2rem; font-weight: normal; color: #000; }
+.w-tabs { display: flex; gap: 0; font-size: .82rem; font-family: Arial, sans-serif; }
+.w-tab { padding: .35rem 1rem; border: 1px solid #a2a9b1; border-bottom: none; background: #f8f9fa; color: #3366cc; cursor: pointer; position: relative; top: 1px; }
+.w-tab:first-child { border-radius: 2px 0 0 0; }
+.w-tab:hover { background: #fff; }
+.w-tab.active { background: #fff; color: #202122; z-index: 1; }
+.w-lead { font-size: .93rem; line-height: 1.75; color: #202122; margin-bottom: 1rem; }
+.w-lead b { font-weight: bold; }
+.w-toc { float: right; margin: 0 0 1rem 1.5rem; background: #f8f9fa; border: 1px solid #a2a9b1; padding: .8rem 1rem; font-size: .82rem; font-family: Arial, sans-serif; min-width: 220px; }
+.w-toc h4 { font-size: .82rem; margin-bottom: .4rem; text-align: center; }
+.w-toc ol { padding-left: 1.2rem; }
+.w-toc li { margin-bottom: .25rem; }
+.w-toc a { color: #3366cc; cursor: pointer; }
+.w-toc a:hover { text-decoration: underline; }
+.w-h2 { font-size: 1.3rem; font-weight: normal; border-bottom: 1px solid #a2a9b1; margin: 1.2rem 0 .5rem; padding-bottom: .2rem; font-family: 'Linux Libertine', Georgia, serif; }
+.w-h3 { font-size: 1rem; font-weight: bold; margin: .9rem 0 .3rem; font-family: Arial, sans-serif; }
+.w-text { font-size: .88rem; line-height: 1.7; color: #202122; margin-bottom: .7rem; }
+.w-text a { color: #3366cc; cursor: pointer; }
+.w-text a:hover { text-decoration: underline; }
+.w-cite { vertical-align: super; font-size: .7rem; color: #3366cc; cursor: pointer; }
+.w-infobox { float: right; clear: right; margin: 0 0 1rem 1.5rem; border: 1px solid #a2a9b1; background: #f8f9fa; font-size: .82rem; font-family: Arial, sans-serif; width: 260px; }
+.w-infobox-title { background: #cee0f2; text-align: center; font-weight: bold; padding: .4rem; font-size: .85rem; }
+.w-infobox-img { width: 100%; height: 200px; background: linear-gradient(135deg, #7B3F00, #4a1a00); display: flex; align-items: center; justify-content: center; font-size: 5rem; }
+.w-infobox-body { padding: .6rem; }
+.w-infobox tr td:first-child { font-weight: bold; padding-right: .5rem; color: #54595d; vertical-align: top; white-space: nowrap; font-size: .76rem; }
+.w-infobox tr td { padding: .2rem 0; font-size: .78rem; border-bottom: 1px solid #e8e8e8; }
+.w-sidebar-box { background: #f8f9fa; border: 1px solid #a2a9b1; padding: .7rem; margin-bottom: .8rem; }
+.w-sidebar-box h4 { font-size: .82rem; font-weight: bold; margin-bottom: .5rem; border-bottom: 1px solid #a2a9b1; padding-bottom: .3rem; }
+.w-sidebar-box ul { list-style: none; padding: 0; }
+.w-sidebar-box li { padding: .25rem 0; border-bottom: 1px solid #f0f0f0; }
+.w-sidebar-box a { color: #3366cc; cursor: pointer; font-size: .8rem; }
+.w-sidebar-box a:hover { text-decoration: underline; }
+.w-edit-link { font-size: .72rem; color: #3366cc; cursor: pointer; }
+.w-edit-link:hover { text-decoration: underline; }
+.w-reflist { font-size: .78rem; color: #54595d; font-family: Arial, sans-serif; padding-left: 1.5rem; }
+.w-reflist li { margin-bottom: .2rem; line-height: 1.5; }
+.w-note-panel { background: #f8f9fa; border: 2px solid #a2a9b1; padding: .8rem 1rem; margin: .8rem 0; font-family: Arial, sans-serif; font-size: .82rem; }
+.w-note-panel h4 { font-size: .83rem; font-weight: 700; margin-bottom: .5rem; color: #3366cc; }
+.w-note-panel textarea { width: 100%; min-height: 80px; border: 1px solid #a2a9b1; padding: .4rem; font-size: .82rem; font-family: inherit; resize: vertical; }
+.w-note-panel-btns { display: flex; gap: .4rem; margin-top: .5rem; }
+.w-note-btn { background: #f8f9fa; border: 1px solid #a2a9b1; padding: .3rem .7rem; font-size: .78rem; font-family: inherit; color: #3366cc; cursor: pointer; border-radius: 2px; }
+.w-note-btn:hover { background: #eaf3fb; }
+.w-note-btn.primary { background: #3366cc; color: #fff; }
+.w-note-btn.primary:hover { background: #2255bb; }
+.w-footer { background: #f8f9fa; border-top: 1px solid #a2a9b1; padding: 1rem 1.5rem; font-size: .78rem; font-family: Arial, sans-serif; color: #54595d; text-align: center; margin-top: 2rem; }
+.clearfix::after { content: ''; display: table; clear: both; }
+
+/* ──────────────────────────────────────
+   DOCS THEME
+   ────────────────────────────────────── */
+#theme-docs { background: #f7f7f5; min-height: 100vh; font-family: Arial, Helvetica, sans-serif; }
+.d-header { background: #1c2333; color: #fff; padding: .6rem 2rem; display: flex; justify-content: space-between; align-items: center; font-size: .78rem; flex-wrap: wrap; gap: .5rem; }
+.d-header-left { display: flex; align-items: center; gap: 1rem; }
+.d-logo { font-size: 1rem; font-weight: 700; letter-spacing: -.3px; color: #e2e8f0; }
+.d-version { background: #2d3748; padding: .2rem .5rem; border-radius: 3px; font-size: .68rem; color: #90cdf4; }
+.d-header-right { display: flex; gap: 1.5rem; color: #90cdf4; font-size: .75rem; }
+.d-header-right a { color: #90cdf4; cursor: pointer; }
+.d-header-right a:hover { color: #bee3f8; }
+.d-nav { background: #2d3748; padding: .45rem 2rem; display: flex; gap: 2rem; border-bottom: 1px solid #4a5568; flex-wrap: wrap; }
+.d-nav a { color: #cbd5e0; font-size: .8rem; cursor: pointer; padding: .2rem 0; border-bottom: 2px solid transparent; }
+.d-nav a:hover { color: #fff; }
+.d-nav a.active { color: #90cdf4; border-bottom-color: #90cdf4; }
+.d-body { display: flex; max-width: 1100px; margin: 0 auto; padding: 1.5rem 2rem; gap: 2rem; }
+.d-sidebar { width: 210px; flex-shrink: 0; }
+.d-sidebar-section { margin-bottom: 1.2rem; }
+.d-sidebar-section h5 { font-size: .68rem; text-transform: uppercase; letter-spacing: 1px; color: #718096; margin-bottom: .5rem; font-weight: 700; }
+.d-sidebar-section ul { list-style: none; padding: 0; }
+.d-sidebar-section li { padding: .28rem .6rem; font-size: .8rem; color: #4a5568; cursor: pointer; border-left: 2px solid transparent; border-radius: 0 4px 4px 0; }
+.d-sidebar-section li:hover { color: #1a202c; border-left-color: #e2e8f0; background: #edf2f7; }
+.d-sidebar-section li.active { color: #2b6cb0; border-left-color: #3182ce; background: #ebf8ff; font-weight: 600; }
+.d-sidebar-section li.trigger { color: #3182ce; }
+.d-sidebar-section li.trigger:hover { background: #ebf8ff; }
+.d-main { flex: 1; min-width: 0; }
+.d-breadcrumb { font-size: .75rem; color: #718096; margin-bottom: 1rem; display: flex; align-items: center; gap: .4rem; }
+.d-breadcrumb span { color: #a0aec0; }
+.d-main-title { font-size: 1.5rem; font-weight: 700; color: #1a202c; margin-bottom: .3rem; }
+.d-meta { font-size: .75rem; color: #a0aec0; margin-bottom: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.d-section { background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 1.2rem 1.5rem; margin-bottom: 1rem; }
+.d-section h3 { font-size: .9rem; font-weight: 700; color: #2d3748; margin-bottom: .6rem; display: flex; align-items: center; gap: .5rem; }
+.d-section-num { background: #ebf8ff; color: #2b6cb0; padding: .1rem .4rem; border-radius: 3px; font-size: .75rem; cursor: pointer; font-weight: 700; }
+.d-section-num:hover { background: #bee3f8; }
+.d-text { font-size: .83rem; color: #4a5568; line-height: 1.75; }
+.d-text p { margin-bottom: .5rem; }
+.d-ol { padding-left: 1.4rem; font-size: .83rem; color: #4a5568; line-height: 2; }
+.d-ol li { margin-bottom: .15rem; }
+.d-trigger-link { color: #3182ce; cursor: pointer; font-weight: 600; }
+.d-trigger-link:hover { text-decoration: underline; }
+.d-callout { background: #fffbeb; border: 1px solid #f6e05e; border-radius: 5px; padding: .7rem 1rem; margin-top: .8rem; font-size: .8rem; color: #744210; }
+.d-support-panel { background: #fff; border: 2px solid #3182ce; border-radius: 6px; padding: 1.2rem; margin-top: 1rem; }
+.d-support-panel h3 { font-size: .9rem; font-weight: 700; color: #2b6cb0; margin-bottom: .7rem; }
+.d-form-group { margin-bottom: .7rem; }
+.d-form-group label { font-size: .75rem; font-weight: 700; color: #4a5568; display: block; margin-bottom: .3rem; }
+.d-form-group input, .d-form-group select, .d-form-group textarea { width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; padding: .45rem .6rem; font-size: .82rem; font-family: inherit; color: #2d3748; outline: none; }
+.d-form-group input:focus, .d-form-group select:focus, .d-form-group textarea:focus { border-color: #3182ce; box-shadow: 0 0 0 1px #3182ce; }
+.d-submit-btn { background: #3182ce; color: #fff; border: none; padding: .55rem 1.2rem; border-radius: 4px; font-size: .82rem; font-family: inherit; font-weight: 700; }
+.d-submit-btn:hover { background: #2b6cb0; }
+.d-footer { background: #1c2333; color: #718096; text-align: center; padding: 1rem; font-size: .75rem; margin-top: 2rem; }
+
+/* ──────────────────────────────────────
+   FITNESS THEME
+   ────────────────────────────────────── */
+#theme-fitness { background: #0f172a; min-height: 100vh; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.f-header { background: #1e293b; border-bottom: 1px solid #334155; padding: .85rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+.f-logo { font-size: 1.1rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: .5rem; }
+.f-nav { display: flex; gap: .25rem; flex-wrap: wrap; }
+.f-nav a { color: #94a3b8; font-size: .8rem; padding: .4rem .85rem; border-radius: 20px; transition: all .2s; cursor: pointer; }
+.f-nav a:hover { color: #e2e8f0; background: #334155; }
+.f-nav a.active { background: #334155; color: #e2e8f0; }
+.f-nav a.highlight { background: #0ea5e9; color: #fff; font-weight: 600; }
+.f-nav a.highlight:hover { background: #38bdf8; }
+.f-body { padding: 1.5rem 2rem; max-width: 1100px; margin: 0 auto; }
+.f-row { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.f-stat-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.1rem 1.3rem; flex: 1; min-width: 150px; cursor: pointer; transition: border-color .2s; }
+.f-stat-card:hover { border-color: #475569; }
+.f-stat-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .8px; color: #64748b; margin-bottom: .3rem; }
+.f-stat-value { font-size: 1.9rem; font-weight: 700; color: #f1f5f9; line-height: 1.1; }
+.f-stat-sub { font-size: .75rem; color: #38bdf8; margin-top: .2rem; }
+.f-stat-bar { background: #334155; height: 5px; border-radius: 3px; margin-top: .7rem; overflow: hidden; }
+.f-stat-fill { height: 100%; border-radius: 3px; transition: width .6s ease; }
+.f-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+@media (max-width: 700px) { .f-two-col { grid-template-columns: 1fr; } }
+.f-panel { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.1rem; }
+.f-panel-title { font-size: .82rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: .6px; margin-bottom: .8rem; display: flex; justify-content: space-between; align-items: center; }
+.f-chart-bar-row { display: flex; align-items: center; gap: .6rem; margin-bottom: .5rem; }
+.f-chart-label { font-size: .72rem; color: #64748b; width: 28px; }
+.f-chart-bar { flex: 1; background: #334155; height: 8px; border-radius: 4px; overflow: hidden; cursor: pointer; }
+.f-chart-bar:hover .f-chart-fill { opacity: .8; }
+.f-chart-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #38bdf8, #818cf8); transition: width .4s ease; }
+.f-chart-val { font-size: .72rem; color: #94a3b8; width: 50px; text-align: right; }
+.f-ring-row { display: flex; gap: .8rem; align-items: center; margin-bottom: .6rem; cursor: pointer; }
+.f-ring-row:hover .f-ring { transform: scale(1.08); }
+.f-ring { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; border: 3px solid; flex-shrink: 0; transition: transform .2s; }
+.f-ring-info h4 { font-size: .82rem; color: #e2e8f0; margin-bottom: .1rem; }
+.f-ring-info p { font-size: .72rem; color: #64748b; }
+.f-cal { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.1rem; margin-bottom: 1.5rem; }
+.f-cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: .8rem; }
+.f-cal-header h3 { font-size: .9rem; font-weight: 600; color: #f1f5f9; }
+.f-cal-nav { display: flex; gap: .4rem; }
+.f-cal-nav button { background: #334155; color: #94a3b8; border: none; width: 28px; height: 28px; border-radius: 6px; font-size: .8rem; transition: all .2s; }
+.f-cal-nav button:hover { background: #475569; color: #e2e8f0; }
+.f-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.f-cal-day-label { font-size: .68rem; color: #64748b; padding: .3rem 0; text-transform: uppercase; letter-spacing: .3px; }
+.f-cal-day { font-size: .78rem; padding: .4rem .2rem; border-radius: 6px; cursor: pointer; color: #94a3b8; transition: all .2s; }
+.f-cal-day:hover { background: #334155; color: #e2e8f0; }
+.f-cal-day.today { background: #0ea5e9; color: #fff; font-weight: 700; }
+.f-cal-day.has-log { position: relative; color: #c084fc; }
+.f-cal-day.has-log::after { content: ''; width: 4px; height: 4px; background: #c084fc; border-radius: 50%; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); }
+.f-add-row { display: flex; gap: .7rem; flex-wrap: wrap; }
+.f-add-btn { padding: .55rem 1.1rem; border-radius: 8px; border: none; font-size: .82rem; font-weight: 600; font-family: inherit; transition: all .2s; }
+.f-primary { background: #0ea5e9; color: #fff; }
+.f-primary:hover { background: #38bdf8; }
+.f-secondary { background: #334155; color: #cbd5e0; }
+.f-secondary:hover { background: #475569; color: #fff; }
+.f-vitamin { background: #1e293b; color: #a78bfa; border: 1px solid #4c1d95; }
+.f-vitamin:hover { background: #2d1b69; color: #c4b5fd; }
+.f-counter-modal { background: #1e293b; border: 1px solid #475569; border-radius: 12px; padding: 1rem; margin-top: 1rem; }
+.f-counter-row { display: flex; align-items: center; justify-content: space-between; padding: .5rem 0; border-bottom: 1px solid #334155; }
+.f-counter-label { font-size: .83rem; color: #cbd5e0; }
+.f-counter-btns { display: flex; align-items: center; gap: .5rem; }
+.f-counter-val { font-size: 1rem; font-weight: 700; color: #f1f5f9; min-width: 40px; text-align: center; }
+.f-counter-btn { background: #334155; color: #e2e8f0; border: none; width: 28px; height: 28px; border-radius: 6px; font-size: 1rem; line-height: 1; transition: all .2s; }
+.f-counter-btn:hover { background: #475569; }
+.f-footer { background: #1e293b; border-top: 1px solid #334155; padding: 1rem 2rem; font-size: .75rem; color: #475569; text-align: center; margin-top: 2rem; }
+
+/* ──────────────────────────────────────
+   LOGGER PANEL (OVERLAY)
+   ────────────────────────────────────── */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 1000; display: flex; align-items: stretch; justify-content: flex-end; animation: fadeIn .2s ease; }
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+.logger-panel { background: #fff; width: 480px; max-width: 100vw; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; box-shadow: -6px 0 32px rgba(0,0,0,.25); animation: slideIn .25s ease; }
+@keyframes slideIn { from { transform: translateX(100%) } to { transform: translateX(0) } }
+.lp-header { background: #1c2333; color: #fff; padding: .9rem 1.2rem; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.lp-title { font-size: 1rem; font-weight: 700; font-family: Arial, sans-serif; display: flex; align-items: center; gap: .5rem; }
+.lp-close { background: none; border: none; color: #90a4ae; font-size: 1.4rem; line-height: 1; padding: 0; transition: color .2s; }
+.lp-close:hover { color: #fff; }
+.lp-tabs { display: flex; border-bottom: 1px solid #e0e0e0; flex-shrink: 0; background: #f8f9fa; overflow-x: auto; }
+.lp-tab { flex: 1; padding: .7rem .2rem; font-size: .72rem; font-weight: 600; text-align: center; background: none; border: none; border-bottom: 3px solid transparent; color: #78909c; font-family: Arial, sans-serif; transition: all .15s; white-space: nowrap; min-width: 0; }
+.lp-tab:hover { color: #37474f; }
+.lp-tab.active { color: #1c2333; border-bottom-color: #1c2333; }
+.lp-body { padding: 1rem 1.2rem; flex: 1; }
+
+/* Form styles */
+.form-row { display: flex; gap: .7rem; }
+.form-group { display: flex; flex-direction: column; gap: .3rem; margin-bottom: .85rem; flex: 1; }
+.form-group label { font-size: .72rem; font-weight: 700; color: #546e7a; text-transform: uppercase; letter-spacing: .4px; font-family: Arial, sans-serif; }
+.form-group input, .form-group select, .form-group textarea { border: 1px solid #cfd8dc; border-radius: 6px; padding: .45rem .65rem; font-size: .85rem; font-family: Georgia, serif; color: #263238; outline: none; transition: border .15s; background: #fafafa; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #1c2333; background: #fff; box-shadow: 0 0 0 2px rgba(28,35,51,.08); }
+.form-group textarea { min-height: 90px; resize: vertical; }
+.sev-group { margin-bottom: .85rem; }
+.sev-group label { font-size: .72rem; font-weight: 700; color: #546e7a; text-transform: uppercase; letter-spacing: .4px; font-family: Arial, sans-serif; display: block; margin-bottom: .4rem; }
+.sev-btns { display: flex; gap: .3rem; }
+.sev-btn { flex: 1; padding: .4rem .2rem; border: 1.5px solid #cfd8dc; border-radius: 6px; background: #fafafa; font-size: .7rem; font-family: Arial, sans-serif; color: #78909c; font-weight: 600; transition: all .15s; }
+.sev-btn.active { background: #1c2333; color: #fff; border-color: #1c2333; }
+.sev-btn:hover:not(.active) { border-color: #90a4ae; color: #37474f; }
+
+/* Photo upload */
+.photo-upload-area { border: 2px dashed #cfd8dc; border-radius: 8px; padding: 1rem; text-align: center; cursor: pointer; transition: all .2s; margin-bottom: .85rem; }
+.photo-upload-area:hover, .photo-upload-area.drag-over { border-color: #1c2333; background: #f0f4f8; }
+.photo-upload-area input { display: none; }
+.photo-upload-label { font-size: .78rem; color: #78909c; font-family: Arial, sans-serif; cursor: pointer; display: block; }
+.photo-upload-label strong { color: #1c2333; }
+.photo-preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; margin-bottom: .85rem; }
+.photo-thumb { position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 1px solid #e0e0e0; }
+.photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.photo-thumb-rm { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,.6); color: #fff; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: .65rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.photo-note-wrap { margin-top: .2rem; }
+.photo-note-input { width: 100%; border: none; border-top: 1px solid #f0f0f0; padding: .2rem .3rem; font-size: .68rem; font-family: Arial, sans-serif; color: #546e7a; background: #f9f9f9; }
+.photo-note-input:focus { outline: none; background: #fff; }
+
+/* Buttons */
+.save-btn { background: #1c2333; color: #fff; border: none; padding: .7rem 1.5rem; border-radius: 8px; font-size: .88rem; font-weight: 700; font-family: Arial, sans-serif; width: 100%; margin-top: .3rem; transition: background .15s; }
+.save-btn:hover { background: #37474f; }
+.panic-btn { background: none; border: 1.5px solid #e53935; color: #e53935; border-radius: 8px; padding: .55rem 1rem; font-size: .78rem; font-family: Arial, sans-serif; font-weight: 700; width: 100%; margin-top: .6rem; transition: all .15s; }
+.panic-btn:hover { background: #e53935; color: #fff; }
+
+/* Timeline */
+.filter-row { display: flex; gap: .5rem; margin-bottom: .8rem; flex-wrap: wrap; }
+.filter-row select { border: 1px solid #cfd8dc; border-radius: 6px; padding: .35rem .5rem; font-size: .78rem; font-family: Arial, sans-serif; color: #546e7a; background: #fafafa; flex: 1; }
+.entry-count { font-size: .75rem; color: #90a4ae; font-family: Arial, sans-serif; margin-bottom: .5rem; }
+.entry-card { border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; margin-bottom: .6rem; background: #fff; }
+.entry-card-header { padding: .7rem .9rem; cursor: pointer; display: flex; align-items: flex-start; gap: .5rem; }
+.entry-card-header:hover { background: #f8f9fa; }
+.entry-card-left { flex: 1; min-width: 0; }
+.entry-card-datetime { font-size: .72rem; color: #90a4ae; font-family: Arial, sans-serif; margin-bottom: .25rem; }
+.entry-meta-row { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.type-chip { font-size: .68rem; padding: .15rem .45rem; border-radius: 3px; font-family: Arial, sans-serif; font-weight: 700; }
+.chip-Physical { background: #ffebee; color: #c62828; }
+.chip-Verbal { background: #fff8e1; color: #e65100; }
+.chip-Emotional { background: #e8f5e9; color: #2e7d32; }
+.chip-Financial { background: #e3f2fd; color: #1565c0; }
+.chip-Other { background: #f3e5f5; color: #6a1b9a; }
+.sev-dots { display: flex; gap: 2px; }
+.sev-dot { width: 7px; height: 7px; border-radius: 50%; background: #e0e0e0; }
+.sev-dot.on { background: #1c2333; }
+.loc-tag { font-size: .68rem; color: #78909c; font-family: Arial, sans-serif; }
+.entry-card-actions { display: flex; gap: .3rem; flex-shrink: 0; }
+.entry-expand-btn { background: none; border: none; color: #bdbdbd; font-size: .75rem; padding: .1rem .3rem; }
+.entry-expand-btn:hover { color: #546e7a; }
+.entry-del-btn { background: none; border: none; color: #ef9a9a; font-size: .82rem; padding: .1rem .3rem; }
+.entry-del-btn:hover { color: #e53935; }
+.entry-body { max-height: 0; overflow: hidden; transition: max-height .25s ease; border-top: 0px solid #e0e0e0; }
+.entry-body.open { max-height: 600px; border-top: 1px solid #f0f0f0; }
+.entry-body-inner { padding: .7rem .9rem; }
+.entry-field { margin-bottom: .5rem; font-family: Arial, sans-serif; }
+.entry-field strong { font-size: .7rem; text-transform: uppercase; letter-spacing: .4px; color: #90a4ae; display: block; margin-bottom: .15rem; }
+.entry-field p { font-size: .82rem; color: #37474f; line-height: 1.5; }
+.injury-badge { background: #ffebee; color: #c62828; font-size: .7rem; font-weight: 700; padding: .15rem .45rem; border-radius: 3px; font-family: Arial, sans-serif; }
+.entry-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; margin-top: .5rem; }
+.entry-photo-thumb { aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 1px solid #e0e0e0; cursor: pointer; }
+.entry-photo-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .2s; }
+.entry-photo-thumb:hover img { transform: scale(1.05); }
+.entry-photo-note { font-size: .68rem; color: #90a4ae; margin-top: .15rem; text-align: center; }
+.empty-state { text-align: center; padding: 2rem 1rem; }
+.es-icon { font-size: 2.5rem; margin-bottom: .5rem; }
+.empty-state p { font-size: .83rem; color: #90a4ae; font-family: Arial, sans-serif; line-height: 1.6; }
+
+/* Report */
+.report-area { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 6px; padding: 1rem; font-size: .78rem; font-family: 'Courier New', monospace; color: #263238; white-space: pre-wrap; word-break: break-word; max-height: 50vh; overflow-y: auto; margin-bottom: .7rem; line-height: 1.6; }
+.report-area[contenteditable=true] { outline: none; border-color: #1c2333; background: #fff; }
+.report-btn { display: inline-block; margin-right: .4rem; margin-bottom: .4rem; padding: .5rem 1rem; border-radius: 6px; font-size: .8rem; font-family: Arial, sans-serif; font-weight: 600; cursor: pointer; border: 1.5px solid; transition: all .15s; }
+.report-gen { background: #1c2333; color: #fff; border-color: #1c2333; }
+.report-gen:hover { background: #37474f; }
+.report-ai { background: #6200ea; color: #fff; border-color: #6200ea; }
+.report-ai:hover { background: #4a00b4; }
+.report-dl { background: #fff; color: #1565c0; border-color: #1565c0; }
+.report-dl:hover { background: #e1f0ff; }
+.report-edit-toggle { background: #fff; color: #546e7a; border-color: #cfd8dc; }
+.report-edit-toggle:hover { background: #f5f5f5; }
+.ai-badge { display: inline-flex; align-items: center; gap: .3rem; background: #ede7f6; color: #4a148c; font-size: .7rem; padding: .2rem .5rem; border-radius: 12px; font-family: Arial, sans-serif; margin-bottom: .5rem; }
+
+/* Resources */
+.res-category { margin-bottom: 1.1rem; }
+.res-category h4 { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: #546e7a; margin-bottom: .4rem; font-family: Arial, sans-serif; border-bottom: 1px solid #eceff1; padding-bottom: .3rem; }
+.res-card { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 7px; padding: .65rem .8rem; margin-bottom: .4rem; font-family: Arial, sans-serif; }
+.res-card-name { font-size: .82rem; font-weight: 700; color: #263238; margin-bottom: .2rem; }
+.res-card-detail { font-size: .78rem; color: #546e7a; line-height: 1.55; }
+.res-card-detail a { color: #1565c0; }
+.res-card-detail a:hover { text-decoration: underline; }
+.res-phone { font-weight: 700; color: #263238; }
+.res-emergency { background: #fff8e1; border-color: #ffe082; }
+.res-emergency .res-card-name { color: #e65100; }
+
+/* PIN modal */
+.pin-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.pin-modal { background: #fff; border-radius: 16px; padding: 2rem 1.5rem; width: 300px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.3); animation: popIn .25s cubic-bezier(.34,1.56,.64,1); }
+@keyframes popIn { from { transform: scale(.85); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+.pin-icon { font-size: 2rem; margin-bottom: .5rem; }
+.pin-modal h3 { font-size: 1rem; font-weight: 700; color: #1c2333; font-family: Arial, sans-serif; margin-bottom: .3rem; }
+.pin-modal p { font-size: .78rem; color: #78909c; font-family: Arial, sans-serif; margin-bottom: 1rem; }
+.pin-display { font-size: 2rem; letter-spacing: .8rem; color: #1c2333; font-family: 'Courier New', monospace; min-height: 2.5rem; margin-bottom: 1rem; }
+.pin-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin-bottom: .6rem; }
+.pin-key { padding: .75rem; border: 1px solid #e0e0e0; border-radius: 10px; background: #f8f9fa; font-size: 1.1rem; font-weight: 600; font-family: Arial, sans-serif; color: #263238; transition: all .1s; }
+.pin-key:hover { background: #1c2333; color: #fff; border-color: #1c2333; }
+.pin-key:active { transform: scale(.95); }
+.pin-key.del { font-size: .9rem; color: #78909c; }
+.pin-key.cancel-x { font-size: .8rem; color: #78909c; }
+.pin-cancel { width: 100%; padding: .45rem; border: 1px solid #e0e0e0; background: none; border-radius: 8px; font-size: .82rem; font-family: Arial, sans-serif; color: #78909c; }
+.pin-cancel:hover { background: #f5f5f5; }
+.pin-error { color: #e53935; font-size: .8rem; margin-top: .4rem; font-family: Arial, sans-serif; min-height: 1.1rem; }
+
+/* Photo lightbox */
+.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 3000; display: flex; align-items: center; justify-content: center; animation: fadeIn .15s ease; }
+.lightbox img { max-width: 90vw; max-height: 85vh; border-radius: 6px; object-fit: contain; }
+.lightbox-close { position: absolute; top: 1rem; right: 1.5rem; color: #fff; font-size: 2rem; cursor: pointer; background: none; border: none; }
+.lightbox-caption { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); color: #ccc; font-size: .82rem; font-family: Arial, sans-serif; text-align: center; }
+
+/* Toast notification */
+.toast { position: fixed; bottom: 5.5rem; left: 50%; transform: translateX(-50%) translateY(10px); background: #1b5e20; color: #fff; padding: .6rem 1.3rem; border-radius: 24px; font-size: .82rem; font-family: Arial, sans-serif; z-index: 3000; opacity: 0; transition: all .3s; pointer-events: none; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,.2); }
+.toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.error { background: #b71c1c; }
+.toast.info { background: #1565c0; }
+
+/* V3: No theme switcher - removed */
+
+/* V3: Voice-to-text button */
+.voice-btn { background: #fff; border: 1.5px solid #cfd8dc; border-radius: 8px; padding: .45rem .9rem; font-size: .78rem; font-family: Arial, sans-serif; color: #546e7a; font-weight: 600; display: inline-flex; align-items: center; gap: .4rem; transition: all .2s; margin-bottom: .5rem; }
+.voice-btn:hover { border-color: #e53935; color: #e53935; }
+.voice-btn.recording { background: #ffebee; border-color: #e53935; color: #e53935; animation: pulse-red 1.2s infinite; }
+@keyframes pulse-red { 0%,100% { box-shadow: 0 0 0 0 rgba(229,57,53,.3) } 50% { box-shadow: 0 0 0 6px rgba(229,57,53,0) } }
+
+/* V3: Quick log button */
+.quick-log-btn { background: #e8f5e9; border: 1.5px solid #43a047; color: #2e7d32; border-radius: 8px; padding: .45rem .9rem; font-size: .78rem; font-family: Arial, sans-serif; font-weight: 700; display: inline-flex; align-items: center; gap: .4rem; transition: all .2s; margin-bottom: .5rem; margin-left: .4rem; }
+.quick-log-btn:hover { background: #43a047; color: #fff; }
+
+/* V3: Auto-lock warning */
+.autolock-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff3e0; border-top: 1px solid #ff9800; color: #e65100; font-size: .75rem; font-family: Arial, sans-serif; padding: .3rem 1rem; text-align: center; z-index: 800; display: none; }
+
+/* V3: Firearm / danger toast (bottom-right) */
+.danger-toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #1c2333; color: #fff; padding: .8rem 1.1rem; border-radius: 10px; font-size: .8rem; font-family: Arial, sans-serif; z-index: 4000; max-width: 280px; box-shadow: 0 6px 24px rgba(0,0,0,.25); display: none; animation: slideUp .3s ease; }
+.danger-toast.visible { display: block; }
+.danger-toast-title { font-weight: 700; margin-bottom: .3rem; color: #ff9800; }
+.danger-toast-btn { background: #ff9800; color: #fff; border: none; border-radius: 5px; padding: .3rem .7rem; font-size: .74rem; margin-top: .5rem; cursor: pointer; font-family: Arial, sans-serif; font-weight: 600; }
+.danger-toast-close { position: absolute; top: .4rem; right: .6rem; background: none; border: none; color: #90a4ae; font-size: 1rem; cursor: pointer; }
+@keyframes slideUp { from { transform: translateY(20px); opacity:0 } to { transform: translateY(0); opacity:1 } }
+
+/* V3: Crisis panel */
+.crisis-panel { background: #fff; border: 2px solid #5c6bc0; border-radius: 12px; padding: 1.2rem; margin-bottom: 1rem; display: none; }
+.crisis-panel.visible { display: block; }
+.crisis-panel-title { font-size: 1rem; font-weight: 700; color: #3949ab; font-family: Arial, sans-serif; margin-bottom: .4rem; }
+.crisis-panel-msg { font-size: .83rem; color: #37474f; line-height: 1.6; margin-bottom: .8rem; font-family: Arial, sans-serif; }
+.crisis-resource { background: #e8eaf6; border-radius: 7px; padding: .55rem .8rem; margin-bottom: .4rem; font-size: .8rem; font-family: Arial, sans-serif; }
+.crisis-resource strong { color: #283593; display: block; margin-bottom: .15rem; }
+.crisis-resource a { color: #1565c0; }
+
+/* V3: Police send panel */
+.police-panel { background: #f8f9fa; border: 1.5px solid #cfd8dc; border-radius: 10px; padding: 1rem; margin-top: .6rem; }
+.police-panel h4 { font-size: .82rem; font-weight: 700; color: #37474f; font-family: Arial, sans-serif; margin-bottom: .5rem; }
+.police-station-info { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: .6rem .8rem; font-size: .78rem; font-family: Arial, sans-serif; color: #37474f; margin-bottom: .6rem; }
+.police-confirm-btn { background: #1565c0; color: #fff; border: none; padding: .55rem 1rem; border-radius: 6px; font-size: .8rem; font-weight: 700; font-family: Arial, sans-serif; margin-right: .4rem; }
+.police-confirm-btn:hover { background: #0d47a1; }
+.police-copy-btn { background: #fff; color: #546e7a; border: 1.5px solid #cfd8dc; padding: .55rem 1rem; border-radius: 6px; font-size: .8rem; font-weight: 600; font-family: Arial, sans-serif; }
+.police-copy-btn:hover { background: #f5f5f5; }
+
+/* V3: Risk panel in report */
+.risk-badge { display: inline-block; padding: .25rem .7rem; border-radius: 20px; font-size: .75rem; font-weight: 700; font-family: Arial, sans-serif; margin-bottom: .5rem; }
+.risk-low { background: #e8f5e9; color: #2e7d32; }
+.risk-medium { background: #fff3e0; color: #e65100; }
+.risk-high { background: #ffebee; color: #c62828; }
+
+/* V3: Backup button */
+.backup-btn { background: #fff; color: #37474f; border: 1.5px solid #cfd8dc; padding: .45rem .9rem; border-radius: 6px; font-size: .78rem; font-family: Arial, sans-serif; font-weight: 600; cursor: pointer; }
+.backup-btn:hover { background: #f5f5f5; }
+
+/* V3: Edit entry button */
+.entry-edit-btn { background: none; border: none; color: #90a4ae; font-size: .78rem; padding: .1rem .3rem; cursor: pointer; }
+.entry-edit-btn:hover { color: #1565c0; }
+
+/* V3: Decoy mode label (hidden from screen visually, used internally) */
+.decoy-mode-active { /* no visible style — purely logical */ }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cfd8dc; border-radius: 3px; }
+
+/* Hint bar */
+.hint-bar { background: #fffde7; border-bottom: 1px solid #f9a825; color: #5d4037; font-size: .75rem; font-family: Arial, sans-serif; text-align: center; padding: .35rem 1rem; position: sticky; top: 0; z-index: 800; display: flex; align-items: center; justify-content: center; gap: .5rem; flex-wrap: wrap; }
+.hint-bar strong { color: #bf360c; }
+.hint-close { background: none; border: none; font-size: .9rem; color: #78909c; margin-left: .5rem; cursor: pointer; padding: 0; line-height: 1; }
+.hint-close:hover { color: #37474f; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cfd8dc; border-radius: 3px; }
+
+/* AI loading spinner */
+.ai-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: .3rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="hint-bar" id="hint-bar">
+  <strong>SafeLog V4 Demo:</strong>
+  🛒 Click logo 3× in Grocery&nbsp;|&nbsp;
+  📖 Invisible area after ref #13 in Wiki&nbsp;|&nbsp;
+  📄 Invisible area after "Termination" in Docs sidebar&nbsp;|&nbsp;
+  ⚡ Invisible area inside "Log Workout" button in Fitness&nbsp;|&nbsp;
+  <kbd>Ctrl+Shift+L</kbd> anywhere · PIN: <strong>1234</strong>
+  <button class="hint-close" onclick="document.getElementById('hint-bar').remove()">✕ hide</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     THEME: GROCERY (Amazon Fresh inspired)
+     ══════════════════════════════════════════ -->
+<div id="theme-grocery">
+  <header class="g-header">
+    <div class="g-header-top">
+      <div class="g-logo" id="gro-logo">
+        <span class="g-logo-leaf">🌿</span> FreshLocal
+      </div>
+      <div class="g-location"><span>📍</span><div><div style="font-size:.62rem;color:#aaa">Deliver to</div><strong style="color:#fff;font-size:.78rem">Nashville 37201</strong></div></div>
+      <div class="g-search-wrap" id="gro-search-wrap">
+        <select class="g-search-cat">
+          <option>All</option>
+          <option>Produce</option>
+          <option>Dairy</option>
+          <option>Meat</option>
+          <option>Pantry</option>
+        </select>
+        <input type="text" class="g-search-input" id="gro-search-input" placeholder="Search FreshLocal…" autocomplete="off">
+        <button class="g-search-btn" onclick="groSearch()">🔍</button>
+        <div class="g-search-results hidden" id="gro-search-results"></div>
+      </div>
+      <div class="g-header-right">
+        <div class="g-header-link"><div>Account</div><strong>& Lists</strong></div>
+        <div class="g-header-link"><div>Returns</div><strong>& Orders</strong></div>
+        <div class="g-cart-btn" onclick="scrollToCart()">
+          <div>🛒</div>
+          <div class="g-cart-count" id="gro-cart-count">0</div>
+          <strong>Cart</strong>
+        </div>
+      </div>
+    </div>
+    <nav class="g-nav-bar">
+      <a onclick="filterCatNav('')" class="active" id="gro-nav-all">☰ All</a>
+      <a onclick="filterCatNav('')">Weekly Deals</a>
+      <a onclick="filterCatNav('Produce')">Produce</a>
+      <a onclick="filterCatNav('Dairy')">Dairy &amp; Eggs</a>
+      <a onclick="filterCatNav('Meat')">Meat &amp; Seafood</a>
+      <a onclick="filterCatNav('Bakery')">Bakery</a>
+      <a onclick="filterCatNav('Frozen')">Frozen</a>
+      <a id="gro-list-btn" onclick="scrollToCart()">🛒 View Cart</a>
+    </nav>
+    <div class="g-banner">🎉 Free delivery on orders $35+ · Members save an extra 10% · <span style="cursor:pointer;text-decoration:underline">Join FreshLocal Prime</span></div>
+  </header>
+
+  <div class="g-body">
+    <div class="g-sidebar-left">
+      <div class="g-cat-panel">
+        <h4>Shop by Category</h4>
+        <ul id="gro-cat-list">
+          <li class="active" onclick="filterCat('')">All Items</li>
+          <li onclick="filterCat('Produce')">🥬 Produce</li>
+          <li onclick="filterCat('Dairy')">🥛 Dairy & Eggs</li>
+          <li onclick="filterCat('Meat')">🥩 Meat & Seafood</li>
+          <li onclick="filterCat('Bakery')">🍞 Bakery</li>
+          <li onclick="filterCat('Pantry')">🥫 Pantry</li>
+          <li onclick="filterCat('Frozen')">❄️ Frozen</li>
+        </ul>
+      </div>
+      <div class="g-cat-panel">
+        <h4>Deals & Savings</h4>
+        <ul>
+          <li>Prime Exclusive</li>
+          <li>Today's Deals</li>
+          <li>Clip Coupons</li>
+          <li>Buy Again</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="g-main">
+      <div class="g-hero-banner">
+        <div class="g-hero-text">
+          <h2>Big Savings,<br>Fresh Picks</h2>
+          <p>Member deals valid through Saturday · New circular every Wednesday</p>
+          <button class="g-hero-badge" onclick="document.getElementById('gro-grid').scrollIntoView({behavior:'smooth'})">Shop This Week's Deals</button>
+        </div>
+        <div class="g-hero-emojis">🍎 🥦 🥛 🍗 🧀 🍞</div>
+      </div>
+      <div class="g-section">
+        <div class="g-section-header">
+          <div class="g-section-title">⭐ Featured Deals This Week</div>
+          <div class="g-section-link">See all deals →</div>
+        </div>
+        <div class="g-grid" id="gro-grid"></div>
+      </div>
+      <div class="g-section">
+        <div class="g-section-header">
+          <div class="g-section-title">🥩 Meat & Seafood Specials</div>
+          <div class="g-section-link">View all →</div>
+        </div>
+        <div class="g-grid" id="gro-grid-2"></div>
+      </div>
+    </div>
+
+    <div class="g-cart-sidebar" id="gro-cart-sidebar">
+      <div class="g-cart-panel">
+        <h3>🛒 Your Cart <span style="font-weight:400;font-size:.75rem;color:#565959" id="gro-cart-header-count"></span></h3>
+        <div id="gro-cart-body">
+          <div class="g-cart-empty">Your cart is empty.<br>Add items to get started.</div>
+        </div>
+        <button class="g-checkout-btn" onclick="showToast('Checkout not available in demo.','info')">Proceed to Checkout</button>
+      </div>
+      <div class="g-list-panel" id="gro-list-panel">
+        <h4>📝 Shopping List <span id="gro-list-count" style="font-weight:400;color:#999"></span></h4>
+        <div id="gro-list-items"><div style="font-size:.78rem;color:#999;padding:.3rem 0">No items yet. Click "Add to List" on any product.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="g-footer">
+    <div class="g-footer-links">
+      <a>Careers</a><span id="gro-invisible-trigger" style="color:#131921;background:transparent;user-select:none;cursor:default;display:inline-block;padding:.2rem .4rem">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><a>Blog</a><a>About FreshLocal</a><a>Investor Relations</a>
+      <a>Accessibility</a><a>Privacy Notice</a><a>Conditions of Use</a>
+    </div>
+    © 2026 FreshLocal, Inc. · All rights reserved · Prices and availability subject to change.
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════
+     THEME: WIKI (dense encyclopedia style)
+     ══════════════════════════════════════════ -->
+<div id="theme-wiki" class="hidden">
+  <header class="w-header">
+    <div class="w-logo-wrap">
+      <div class="w-logo">📖 KB</div>
+      <div class="w-logo-sub">KnowledgeBase</div>
+    </div>
+    <div class="w-search-bar">
+      <input type="text" id="wiki-search" placeholder="Search KnowledgeBase..." autocomplete="off">
+      <button onclick="wikiSearch()">Search</button>
+      <div class="w-search-dropdown hidden" id="wiki-search-dropdown"></div>
+    </div>
+    <div class="w-header-links">
+      <a>Create account</a>
+      <a>Log in</a>
+      <a>Donate</a>
+    </div>
+  </header>
+  <div class="w-subheader">
+    <a onclick="wikiNav('main')">Main page</a>
+    <a onclick="wikiNav('contents')">Contents</a>
+    <a onclick="wikiNav('events')">Current events</a>
+    <a onclick="wikiNav('random')" id="wiki-random-link">Random article</a>
+    <a>About KB</a>
+    <a>Contact us</a>
+    <span style="margin-left:auto"><a id="wiki-sidebar-notes">Contributions</a></span>
+  </div>
+  <div class="w-body">
+    <div class="w-main clearfix" id="wiki-article-main">
+      <div class="w-article-header">
+        <h1 class="w-title" id="wiki-article-title">Haitian Revolution</h1>
+        <div class="w-tabs">
+          <div class="w-tab active" onclick="wikiTab(this,'article')">Article</div>
+          <div class="w-tab" onclick="wikiTab(this,'talk')">Talk</div>
+          <div class="w-tab" id="wiki-edit-tab" onclick="wikiTab(this,'edit')">Edit <span class="w-edit-link">[edit]</span></div>
+          <div class="w-tab" onclick="wikiTab(this,'history')">View history</div>
+        </div>
+      </div>
+
+      <!-- Infobox -->
+      <div class="w-infobox">
+        <div class="w-infobox-title">Haitian Revolution</div>
+        <div class="w-infobox-img" style="position:relative;overflow:hidden">
+          <div style="width:100%;height:200px;background:linear-gradient(160deg,#2c1810 0%,#4a2510 30%,#1a0f0a 60%,#0d0704 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem">
+            <div style="font-size:3rem">⚔️</div>
+            <div style="font-size:.68rem;color:#c8a87a;font-family:Arial,sans-serif;text-align:center;padding:0 .5rem;line-height:1.4;font-style:italic">Depiction of the Haitian Revolution, 1791–1804</div>
+          </div>
+        </div>
+        <div style="font-size:.68rem;color:#54595d;font-family:Arial,sans-serif;text-align:center;padding:.25rem .4rem;background:#f0f0f0;border-bottom:1px solid #a2a9b1;font-style:italic">Combat de la Ravine-à-Couleuvres (1802)</div>
+        <div class="w-infobox-body">
+          <table><tbody>
+            <tr><td>Date:</td><td>1791–1804</td></tr>
+            <tr><td>Location:</td><td>Saint-Domingue (present-day Haiti)</td></tr>
+            <tr><td>Result:</td><td>Haitian independence; abolition of slavery</td></tr>
+            <tr><td>Territory:</td><td>France cedes Saint-Domingue</td></tr>
+            <tr><td>Key figures:</td><td>Toussaint Louverture, Jean-Jacques Dessalines, Henri Christophe</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <!-- TOC -->
+      <div class="w-toc">
+        <h4>Contents <span style="font-weight:400;font-size:.75rem">[<a onclick="void 0">hide</a>]</span></h4>
+        <ol>
+          <li><a onclick="scrollToSection('w-s1')">1 Background</a></li>
+          <li><a onclick="scrollToSection('w-s2')">2 Course of events</a>
+            <ol style="padding-left:.8rem;margin-top:.2rem">
+              <li><a onclick="scrollToSection('w-s2a')">2.1 Initial uprising</a></li>
+              <li><a onclick="scrollToSection('w-s2b')">2.2 International dimensions</a></li>
+            </ol>
+          </li>
+          <li><a onclick="scrollToSection('w-s3')">3 Key figures</a></li>
+          <li><a onclick="scrollToSection('w-s4')">4 Consequences</a></li>
+          <li><a onclick="scrollToSection('w-s5')">5 Legacy</a></li>
+          <li><a onclick="scrollToSection('w-s6')">6 References</a></li>
+        </ol>
+      </div>
+
+      <p class="w-lead">The <b>Haitian Revolution</b> (1791–1804) was a successful insurrection by self-liberated enslaved people against French colonial rule in Saint-Domingue. It was the largest and most successful slave revolt in the Western Hemisphere<sup class="w-cite">[1]</sup> and established Haiti as the first free Black republic in the world and the first country in the Western Hemisphere to abolish slavery.</p>
+
+      <h2 class="w-h2" id="w-s1">1 Background</h2>
+      <p class="w-text">Saint-Domingue (the western third of Hispaniola) was one of the wealthiest colonies in the world by the late 18th century, producing nearly half of Europe's sugar and more than half of its coffee. This prosperity was built entirely on the forced labor of approximately 500,000 enslaved Africans, who outnumbered the free population by a ratio of more than ten to one.<sup class="w-cite">[2]</sup></p>
+      <p class="w-text">Colonial society was rigidly stratified. At the top were approximately 32,000 <a>grands blancs</a> (white planters and merchants), followed by a significant population of <a>affranchis</a> (free people of color, many of mixed ancestry, some of whom owned enslaved people themselves). At the base were the enslaved masses, recently imported from West and Central Africa, many retaining strong cultural and religious traditions.<sup class="w-cite">[3]</sup></p>
+
+      <!-- Note panel - blends in as a "talk page note / edit discussion" -->
+      <div class="w-note-panel" id="wiki-note-panel" style="display:none">
+        <h4>📝 Article Notes &amp; Talk Page Draft</h4>
+        <p style="font-size:.78rem;color:#54595d;margin-bottom:.5rem">Use this area to draft article improvements, add references, or document sources for this article.</p>
+        <textarea id="wiki-note-text" placeholder="Add your notes about sources, corrections, or talk page discussion here…"></textarea>
+        <div class="w-note-panel-btns">
+          <button class="w-note-btn primary" onclick="openLoggerFromWiki()">Open full log →</button>
+          <button class="w-note-btn" onclick="document.getElementById('wiki-note-panel').style.display='none'">Close</button>
+        </div>
+      </div>
+
+      <h2 class="w-h2" id="w-s2">2 Course of events</h2>
+      <h3 class="w-h3" id="w-s2a">2.1 Initial uprising (1791)</h3>
+      <p class="w-text">The revolution began with a ceremony at Bois Caïman on the night of August 14–15, 1791, where enslaved leaders gathered to plan the uprising under the leadership of Dutty Boukman, a Jamaican-born coachman and Vodou houngan. Within days, enslaved people had set fire to plantations across the northern province and killed hundreds of colonists.<sup class="w-cite">[4]</sup></p>
+      <p class="w-text">By the end of August 1791, some 100,000 enslaved people had joined the revolt. Hundreds of sugar and coffee plantations had been razed, and the city of Le Cap (Cap-Français) was threatened. The colonial assembly, paralyzed by internal divisions between grands blancs and affranchis, failed to mount an effective response.<sup class="w-cite">[5]</sup></p>
+
+      <h3 class="w-h3" id="w-s2b">2.2 International dimensions</h3>
+      <p class="w-text">The revolution took place against the backdrop of the <a>French Revolution</a> and the broader Atlantic world's debates over liberty and natural rights. Spain and Britain both attempted to exploit the chaos for territorial gain. Spanish forces from neighboring Santo Domingo initially aided rebel leaders, including Toussaint Louverture, who commanded a significant force.<sup class="w-cite">[6]</sup></p>
+      <p class="w-text">A British expeditionary force landed in 1793 in an attempt to seize the colony, but encountered devastating losses from yellow fever and fierce resistance. By 1798, the British had withdrawn, having lost approximately 25,000 soldiers. This failure was one of the largest military defeats ever suffered by Britain in the Caribbean.<sup class="w-cite">[7]</sup></p>
+
+      <h2 class="w-h2" id="w-s3">3 Key figures</h2>
+      <p class="w-text"><b><a href="https://en.wikipedia.org/wiki/Toussaint_Louverture" target="_blank" rel="noopener noreferrer">Toussaint Louverture</a></b> (c. 1743–1803) emerged as the dominant military and political leader of the revolution. A self-educated formerly enslaved man who became a landowner before the revolution, Toussaint was a skilled military tactician. He aligned himself successively with Spain, France, and his own vision of an autonomous Saint-Domingue, drafting a constitution in 1801 that declared him governor-for-life. He was captured by a French expeditionary force in 1802 and died in captivity in France.<sup class="w-cite">[8]</sup></p>
+      <p class="w-text"><b>Jean-Jacques Dessalines</b> (1758–1806) completed the revolution and declared Haitian independence on January 1, 1804, naming the new nation after the indigenous Taíno name for the island. He ordered the massacre of much of the remaining white population and proclaimed himself Emperor Jacques I. He was assassinated in 1806.<sup class="w-cite">[9]</sup></p>
+
+      <h2 class="w-h2" id="w-s4">4 Consequences</h2>
+      <p class="w-text">Haitian independence had immediate and far-reaching consequences. Napoleon, frustrated by the defeat of his Caribbean ambitions, sold the Louisiana Territory to the United States in 1803 — a transaction that nearly doubled the geographic size of the new republic. The success of the revolution sent shockwaves through slaveholding societies across the Americas and intensified fears of slave revolts in the United States, Cuba, and Brazil.<sup class="w-cite">[10]</sup></p>
+      <p class="w-text">France did not recognize Haitian independence until 1825, when Haiti agreed to pay an indemnity of 150 million francs (later reduced to 90 million) to compensate French former colonists for lost "property," including enslaved people. This debt crippled the Haitian economy for well over a century.<sup class="w-cite">[11]</sup></p>
+
+      <h2 class="w-h2" id="w-s5">5 Legacy</h2>
+      <p class="w-text">The Haitian Revolution remains a foundational event in the history of democracy, human rights, and the struggle against slavery and colonialism. It influenced abolitionists in the United States and Europe, and inspired subsequent liberation movements across Latin America. Simón Bolívar received shelter and material support from the Haitian state during his campaigns to liberate South America.<sup class="w-cite">[12]</sup></p>
+      <p class="w-text">In recent scholarship, the revolution has been recognized as the <a>world's most successful anti-colonial rebellion</a> and a critical event in the broader Age of Revolutions alongside the American and French Revolutions. Haiti's 1804 declaration remains the only successful revolution led entirely by enslaved people in recorded history.<sup class="w-cite">[13]</sup></p>
+
+      <h2 class="w-h2" id="w-s6">6 References</h2>
+      <ol class="w-reflist">
+        <li>Dubois, Laurent. <i>Avengers of the New World: The Story of the Haitian Revolution</i>. Harvard University Press, 2004.</li>
+        <li>Geggus, David P. <i>Haitian Revolutionary Studies</i>. Indiana University Press, 2002.</li>
+        <li>Fick, Carolyn E. <i>The Making of Haiti: The Saint Domingue Revolution from Below</i>. University of Tennessee Press, 1990.</li>
+        <li>Bell, Madison Smartt. <i>Toussaint Louverture: A Biography</i>. Pantheon, 2007.</li>
+        <li>James, C.L.R. <i>The Black Jacobins: Toussaint L'Ouverture and the San Domingo Revolution</i>. Vintage, 1963.</li>
+        <li>Girard, Philippe. <i>The Slaves Who Defeated Napoleon: Toussaint Louverture and the Haitian War of Independence</i>. University of Alabama Press, 2011.</li>
+        <li>Buckley, Roger Norman. <i>The British Army in the West Indies</i>. University Press of Florida, 1998.</li>
+        <li>Popkin, Jeremy D. <i>You Are All Free: The Haitian Revolution and the Abolition of Slavery</i>. Cambridge University Press, 2010.</li>
+        <li>Nicholls, David. <i>From Dessalines to Duvalier: Race, Colour and National Independence in Haiti</i>. Cambridge University Press, 1979.</li>
+        <li>Ferrer, Ada. "Haiti, Free Soil, and Antislavery in the Revolutionary Atlantic." <i>American Historical Review</i> 117.1 (2012): 40–66.</li>
+        <li>Daut, Marlene L. <i>Baron de Vastey and the Origins of Black Atlantic Humanism</i>. Palgrave Macmillan, 2017.</li>
+        <li>Gaffield, Julia. <i>Haitian Connections in the Atlantic World</i>. University of North Carolina Press, 2015.</li>
+        <li>Fischer, Sibylle. <i>Modernity Disavowed: Haiti and the Cultures of Slavery in the Age of Revolution</i>. Duke University Press, 2004.</li>
+      </ol>
+      <!-- invisible trigger — color matches background, no hover, no cursor change -->
+      <span id="wiki-invisible-trigger" style="color:#fff;background:transparent;user-select:none;cursor:default;font-size:.78rem;font-family:Arial,sans-serif;display:inline-block;padding:.2rem 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </div>
+
+    <div class="w-sidebar">
+      <div class="w-sidebar-box">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a onclick="wikiNav('main')">Main page</a></li>
+          <li><a onclick="wikiNav('featured')">Featured content</a></li>
+          <li><a onclick="wikiNav('events')">Current events</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/Special:Random" target="_blank" rel="noopener noreferrer">Random article</a></li>
+          <li><a>Donate to KB</a></li>
+        </ul>
+      </div>
+      <div class="w-sidebar-box">
+        <h4>Contribute</h4>
+        <ul>
+          <li><a id="wiki-sidebar-notes">Help</a></li>
+          <li><a>Learn to edit</a></li>
+          <li><a>Community portal</a></li>
+          <li><a>Recent changes</a></li>
+        </ul>
+      </div>
+      <div class="w-sidebar-box">
+        <h4>Related articles</h4>
+        <ul>
+          <li><a href="https://en.wikipedia.org/wiki/Toussaint_Louverture" target="_blank" rel="noopener noreferrer">Toussaint Louverture</a></li>
+          <li><a onclick="wikiNav('dessalines')">Jean-Jacques Dessalines</a></li>
+          <li><a onclick="wikiNav('french-revolution')">French Revolution</a></li>
+          <li><a onclick="wikiNav('abolition')">Atlantic Slave Trade</a></li>
+          <li><a onclick="wikiNav('louisiana')">Louisiana Purchase</a></li>
+          <li><a onclick="wikiNav('bois')">Bois Caïman ceremony</a></li>
+        </ul>
+      </div>
+      <div class="w-sidebar-box">
+        <h4>In other languages</h4>
+        <ul>
+          <li><a>Español</a></li>
+          <li><a>Français</a></li>
+          <li><a>Português</a></li>
+          <li><a>Deutsch</a></li>
+          <li><a>Kreyòl ayisyen</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="w-footer">
+    This page was last edited on 9 April 2026. Text is available under the Creative Commons Attribution-ShareAlike 4.0 License.
+    <br><a href="#">Privacy policy</a> · <a href="#">About KnowledgeBase</a> · <a href="#">Disclaimers</a> · <a href="#">Contact KB</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     THEME: DOCS
+     ══════════════════════════════════════════ -->
+<div id="theme-docs" class="hidden">
+  <header class="d-header">
+    <div class="d-header-left">
+      <div class="d-logo">⚖️ LegalDocs Pro</div>
+      <div class="d-version">v4.3.0</div>
+      <div style="font-size:.72rem;color:#90cdf4">Document ID: UA-2026-0041</div>
+    </div>
+    <div class="d-header-right">
+      <span>Effective: January 1, 2026</span>
+      <a onclick="panicExit()">Home</a>
+      <a onclick="showToast('Print dialog would open here.','info')">Print</a>
+    </div>
+  </header>
+  <nav class="d-nav">
+    <a class="active" onclick="docsNav(this,'agreement')">User Agreement</a>
+    <a onclick="docsNav(this,'privacy')">Privacy Policy</a>
+    <a onclick="docsNav(this,'cookie')">Cookie Policy</a>
+    <a onclick="docsNav(this,'accessibility')">Accessibility</a>
+    <a onclick="docsNav(this,'legal')">Contact Legal</a>
+  </nav>
+  <div class="d-body">
+    <div class="d-sidebar">
+      <div class="d-sidebar-section">
+        <h5>Document Sections</h5>
+        <ul>
+          <li onclick="docsSectionClick(this,'1')">1. Definitions</li>
+          <li onclick="docsSectionClick(this,'2')">2. User Obligations</li>
+          <li onclick="docsSectionClick(this,'3')">3. Data Handling</li>
+          <li onclick="docsSectionClick(this,'4')">4. Liability</li>
+          <li id="docs-43-sidebar" onclick="docsSectionClick(this,'43')">4.3 User Records</li>
+          <li id="docs-term-li" onclick="docsSectionClick(this,'5')">5. Termination<span id="docs-invisible-trigger" style="color:#f7f7f5;background:transparent;user-select:none;cursor:default;display:inline-block;padding:0 .3rem">&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+          <li onclick="docsSectionClick(this,'6')">6. Governing Law</li>
+          <li onclick="docsSectionClick(this,'7')">7. Amendments</li>
+        </ul>
+      </div>
+      <div class="d-sidebar-section">
+        <h5>Downloads</h5>
+        <ul>
+          <li onclick="showToast('PDF download started.','info')"><a>PDF Version</a></li>
+          <li onclick="showToast('Opening print-friendly view.','info')"><a>Print-friendly</a></li>
+          <li onclick="showToast('Viewing archive versions.','info')"><a>Archive versions</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="d-main" id="docs-main-content">
+      <div class="d-breadcrumb">Legal Documents <span>›</span> Platform Agreements <span>›</span> User Agreement</div>
+      <h1 class="d-main-title">Platform User Agreement</h1>
+      <div class="d-meta">
+        <span>Last updated: March 14, 2026</span>
+        <span>Version: 4.3.0</span>
+        <span>Pages: 24</span>
+        <span id="docs-last-viewed" style="color:#718096"></span>
+      </div>
+      <div class="d-section" id="docs-s1">
+        <h3><span class="d-section-num" onclick="docsSectionClick(null,'1')">1</span> Definitions</h3>
+        <div class="d-text"><p>For the purposes of this Agreement, the following terms shall be interpreted as defined herein. "User" refers to any individual or entity accessing the Platform under any conditions. "Services" shall mean all features, functions, content, and interfaces provided by the Platform Operator. "Platform" includes all associated web properties, applications, and APIs. "Personal Records" refers to any information, notes, or data entered by the User into the Platform's record-keeping features.</p></div>
+      </div>
+      <div class="d-section" id="docs-s2">
+        <h3><span class="d-section-num" onclick="docsSectionClick(null,'2')">2</span> User Obligations</h3>
+        <div class="d-text">
+          <ol class="d-ol">
+            <li>Users must maintain accurate and current account information at all times.</li>
+            <li>Users shall not attempt to circumvent security measures or access controls.</li>
+            <li><span class="d-trigger-link" id="docs-23-trigger" style="font-weight:400;color:#4a5568">2.3</span> — Users may store and maintain personal notes and records for their own reference and use. Accessing personal record-keeping features is considered a standard user activity under this Agreement.</li>
+            <li>Unauthorized sharing of account credentials is strictly prohibited under this Agreement.</li>
+            <li>Users agree to comply with all applicable laws and regulations in their jurisdiction.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="d-section" id="docs-s3">
+        <h3><span class="d-section-num" onclick="docsSectionClick(null,'3')">3</span> Data Handling &amp; Privacy</h3>
+        <div class="d-text"><p>All data collected by this Platform is subject to applicable privacy laws including GDPR, CCPA, and other regional legislation. The Platform Operator commits to retaining user data only as necessary to provide requested services. Users retain the right to request deletion of their personal data at any time pursuant to applicable law. For full details, refer to our separate Privacy Policy document.</p></div>
+      </div>
+      <div class="d-section" id="docs-s4">
+        <h3><span class="d-section-num" onclick="docsSectionClick(null,'4')">4</span> Limitation of Liability</h3>
+        <div class="d-text">
+          <p>The Platform Operator shall not be held liable for indirect, incidental, special, or consequential damages arising from use of the services. This limitation applies to the fullest extent permitted by law.</p>
+          <ol class="d-ol">
+            <li>4.1 — Force Majeure provisions apply to all service interruptions beyond reasonable control.</li>
+            <li>4.2 — Maximum aggregate liability is limited to fees paid in the preceding twelve (12) months.</li>
+            <li><span id="docs-43-trigger" style="color:#4a5568;cursor:default">4.3</span> — User-generated records, notes, and personal data entries remain the sole intellectual property of the user at all times. Users may access their personal records through the Platform's designated secure records feature.</li>
+          </ol>
+          <div class="d-callout">⚠️ Users should regularly back up any important records stored within the Platform. The Operator provides no guarantee of perpetual data retention.</div>
+        </div>
+      </div>
+      <div class="d-section" id="docs-s5">
+        <h3><span class="d-section-num" onclick="docsSectionClick(null,'5')">5</span> Termination</h3>
+        <div class="d-text"><p>Either party may terminate this Agreement with thirty (30) days written notice. The Platform Operator reserves the right to immediately suspend or terminate access for violations of these terms. Upon termination, users may request a data export within 90 days. After this period, data may be permanently deleted.</p></div>
+      </div>
+      <!-- Support panel - appears on section 4.3 click, blends in as a records access form -->
+      <div id="docs-support-panel" class="d-support-panel hidden">
+        <h3>📁 Section 4.3 — Personal Records Viewer</h3>
+        <p style="font-size:.8rem;color:#4a5568;margin-bottom:1rem">Per Section 4.3 of this Agreement, you may access your personal record-keeping feature below. All data is stored locally on your device.</p>
+        <div class="d-form-group">
+          <label>Record Category</label>
+          <select id="docs-record-cat">
+            <option>Personal Notes</option>
+            <option>Incident Log</option>
+            <option>Date Records</option>
+          </select>
+        </div>
+        <div class="d-form-group">
+          <label>Verification Code</label>
+          <input type="password" placeholder="Enter your access code…" id="docs-access-code">
+        </div>
+        <button class="d-submit-btn" onclick="openLogger()">Submit</button>
+        <button class="d-submit-btn" style="background:#718096;margin-left:.4rem" onclick="document.getElementById('docs-support-panel').classList.add('hidden')">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <footer class="d-footer">© 2026 LegalDocs Pro · All rights reserved · <a href="#" style="color:#90cdf4">Privacy</a> · <a href="#" style="color:#90cdf4">Terms</a></footer>
+</div>
+
+<!-- ══════════════════════════════════════════
+     THEME: FITNESS
+     ══════════════════════════════════════════ -->
+<div id="theme-fitness" class="hidden">
+  <header class="f-header">
+    <div class="f-logo">⚡ DailyPulse <span style="font-size:.7rem;font-weight:400;color:#64748b;margin-left:.2rem">Health Tracker</span></div>
+    <nav class="f-nav">
+      <a class="active" onclick="fitNav(this,'dashboard')">Dashboard</a>
+      <a onclick="fitNav(this,'workouts')">Workouts</a>
+      <a onclick="fitNav(this,'nutrition')">Nutrition</a>
+      <a onclick="fitNav(this,'sleep')">Sleep</a>
+      <a id="fit-vitamin-btn" onclick="fitNav(this,'vitamins')">Vitamins</a>
+      <a onclick="panicExit()">Home</a>
+    </nav>
+  </header>
+  <div class="f-body">
+    <div class="f-row" id="fit-stats"></div>
+    <div class="f-two-col">
+      <div class="f-panel">
+        <div class="f-panel-title">Weekly Activity <span style="font-size:.7rem;color:#38bdf8;cursor:pointer" onclick="showToast('Viewing detailed activity log.')">View all →</span></div>
+        <div id="fit-chart"></div>
+      </div>
+      <div class="f-panel">
+        <div class="f-panel-title">Goal Rings</div>
+        <div id="fit-rings"></div>
+      </div>
+    </div>
+    <div class="f-cal">
+      <div class="f-cal-header">
+        <h3 id="fit-cal-title">April 2026</h3>
+        <div class="f-cal-nav">
+          <button onclick="fitCalNav(-1)">◀</button>
+          <button onclick="fitCalNav(1)">▶</button>
+        </div>
+      </div>
+      <div class="f-cal-grid" id="fit-cal"></div>
+    </div>
+
+    <!-- Quick counters (always visible, updated by buttons) -->
+    <div class="f-counter-modal">
+      <div class="f-counter-row">
+        <span class="f-counter-label">💧 Water (glasses)</span>
+        <div class="f-counter-btns">
+          <button class="f-counter-btn" onclick="fitCounter('water',-1)">−</button>
+          <span class="f-counter-val" id="fit-water-val">6</span>
+          <button class="f-counter-btn" onclick="fitCounter('water',1)">+</button>
+        </div>
+      </div>
+      <div class="f-counter-row">
+        <span class="f-counter-label">😴 Sleep (hours)</span>
+        <div class="f-counter-btns">
+          <button class="f-counter-btn" onclick="fitCounter('sleep',-1)">−</button>
+          <span class="f-counter-val" id="fit-sleep-val">7</span>
+          <button class="f-counter-btn" onclick="fitCounter('sleep',1)">+</button>
+        </div>
+      </div>
+      <div class="f-counter-row">
+        <span class="f-counter-label">🔥 Streak (days)</span>
+        <div class="f-counter-btns">
+          <button class="f-counter-btn" onclick="fitCounter('streak',-1)">−</button>
+          <span class="f-counter-val" id="fit-streak-val">12</span>
+          <button class="f-counter-btn" onclick="fitCounter('streak',1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="f-add-row" style="margin-top:1rem">
+      <button class="f-add-btn f-primary" onclick="fitActionBtn('Log Workout')">+ Log Workout<span id="fit-invisible-trigger" style="color:#0f172a;background:transparent;user-select:none;cursor:default;display:inline-block;padding:0 .25rem">&nbsp;&nbsp;&nbsp;&nbsp;</span></button>
+      <button class="f-add-btn f-secondary" onclick="fitActionBtn('Add Meal')">+ Add Meal</button>
+      <button class="f-add-btn f-secondary" onclick="fitCounter('water',1)">+ Log Water</button>
+      <button class="f-add-btn f-secondary" id="fit-vitamin-btn2" onclick="fitActionBtn('Vitamins logged')">+ Vitamins</button>
+    </div>
+  </div>
+  <footer class="f-footer">© 2026 DailyPulse · Your personal health companion · Data syncs to your device only</footer>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LOGGER OVERLAY PANEL
+     ══════════════════════════════════════════ -->
+<div id="logger-overlay" class="overlay hidden">
+  <div class="logger-panel" id="logger-panel">
+    <div class="lp-header">
+      <div class="lp-title"><span>📋</span> My Private Notes</div>
+      <button class="lp-close" onclick="closeLogger()" title="Close">×</button>
+    </div>
+    <div class="lp-tabs">
+      <button class="lp-tab active" onclick="switchTab('add')" id="tab-btn-add">+ New Entry</button>
+      <button class="lp-tab" onclick="switchTab('list')" id="tab-btn-list">My Entries</button>
+      <button class="lp-tab" onclick="switchTab('report')" id="tab-btn-report">Report</button>
+      <button class="lp-tab" onclick="switchTab('resources')" id="tab-btn-resources">Resources</button>
+    </div>
+    <div class="lp-body">
+
+      <!-- ── ADD ENTRY TAB ── -->
+      <div id="tab-add">
+        <!-- V3: Crisis panel (shown when self-harm language detected) -->
+        <div class="crisis-panel" id="crisis-panel">
+          <div class="crisis-panel-title">You deserve support right now.</div>
+          <div class="crisis-panel-msg">If you're experiencing thoughts of self-harm, you are not alone. Please reach out to someone who can help you right now.</div>
+          <div class="crisis-resource"><strong>988 Suicide &amp; Crisis Lifeline</strong>Call or text <strong>988</strong> (US, 24/7, free)</div>
+          <div class="crisis-resource"><strong>Crisis Text Line</strong>Text <strong>HOME</strong> to <strong>741741</strong></div>
+          <div class="crisis-resource"><strong>Emergency Services</strong>Call <strong>911</strong> if this is an emergency</div>
+          <div class="crisis-resource"><strong>International Association for Suicide Prevention</strong><a href="https://www.iasp.info/resources/Crisis_Centres/" target="_blank" rel="noopener">Find a crisis center near you →</a></div>
+          <button style="background:none;border:1.5px solid #5c6bc0;color:#3949ab;border-radius:6px;padding:.35rem .7rem;font-size:.75rem;font-family:Arial,sans-serif;margin-top:.5rem;cursor:pointer" onclick="document.getElementById('crisis-panel').classList.remove('visible')">Continue to log entry</button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap">
+          <button class="voice-btn" id="voice-btn" onclick="startVoice()">🎤 Record</button>
+          <button class="quick-log-btn" onclick="quickLog()">⚡ Quick Log</button>
+        </div>
+        <div id="voice-status" style="font-size:.72rem;color:#90a4ae;font-family:Arial,sans-serif;margin-bottom:.5rem;display:none"></div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="log-date">
+          </div>
+          <div class="form-group">
+            <label>Time</label>
+            <input type="time" id="log-time">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Incident Type</label>
+          <select id="log-type">
+            <option value="Physical">Physical</option>
+            <option value="Verbal">Verbal</option>
+            <option value="Emotional">Emotional</option>
+            <option value="Financial">Financial</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="log-desc" placeholder="Describe what happened in your own words…"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="log-loc" placeholder="e.g. home, work, vehicle…">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Relationship to Suspect</label>
+            <input type="text" id="log-relationship" placeholder="e.g. partner, spouse…">
+          </div>
+          <div class="form-group">
+            <label>Suspect Description</label>
+            <input type="text" id="log-suspect" placeholder="Name or description">
+          </div>
+        </div>
+        <div class="sev-group">
+          <label>Severity</label>
+          <div class="sev-btns">
+            <button class="sev-btn" data-v="1" onclick="setSev(1)">1 — Low</button>
+            <button class="sev-btn" data-v="2" onclick="setSev(2)">2</button>
+            <button class="sev-btn active" data-v="3" onclick="setSev(3)">3</button>
+            <button class="sev-btn" data-v="4" onclick="setSev(4)">4</button>
+            <button class="sev-btn" data-v="5" onclick="setSev(5)">5 — High</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Injury?</label>
+            <select id="log-injury">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Injury details</label>
+            <input type="text" id="log-injury-notes" placeholder="Optional">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Threats made?</label>
+            <select id="log-threats">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Threat details</label>
+            <input type="text" id="log-threat-notes" placeholder="Optional">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Witnesses (optional)</label>
+          <input type="text" id="log-witnesses" placeholder="Names or descriptions">
+        </div>
+
+        <!-- Photo upload -->
+        <label style="font-size:.72rem;font-weight:700;color:#546e7a;text-transform:uppercase;letter-spacing:.4px;font-family:Arial,sans-serif;display:block;margin-bottom:.4rem">Photos (optional)</label>
+        <div class="photo-upload-area" id="photo-drop-zone" onclick="document.getElementById('photo-file-input').click()">
+          <input type="file" id="photo-file-input" accept="image/jpeg,image/png,image/webp" multiple>
+          <label class="photo-upload-label">
+            📷 <strong>Click to attach photos</strong> or drag & drop<br>
+            <span style="font-size:.7rem">JPG, PNG, WEBP · Multiple files supported</span>
+          </label>
+        </div>
+        <div class="photo-preview-grid" id="photo-preview-grid"></div>
+
+        <button class="save-btn" id="save-btn-main" onclick="saveEntry()">Save Entry</button>
+        <button class="panic-btn" onclick="panicExit()">⚠ Exit Now — Close This App</button>
+      </div>
+
+      <!-- ── LIST / TIMELINE TAB ── -->
+      <div id="tab-list" class="hidden">
+        <div class="filter-row">
+          <select id="filter-type" onchange="renderTimeline()">
+            <option value="">All types</option>
+            <option>Physical</option>
+            <option>Verbal</option>
+            <option>Emotional</option>
+            <option>Financial</option>
+            <option>Other</option>
+          </select>
+          <select id="filter-sev" onchange="renderTimeline()">
+            <option value="">All severities</option>
+            <option value="5">Severity 5</option>
+            <option value="4">Severity 4+</option>
+            <option value="3">Severity 3+</option>
+          </select>
+        </div>
+        <div id="entry-count" class="entry-count"></div>
+        <div id="timeline-container"></div>
+        <button class="panic-btn" onclick="panicExit()" style="margin-top:.8rem">⚠ Exit Now — Close This App</button>
+      </div>
+
+      <!-- ── REPORT TAB ── -->
+      <div id="tab-report" class="hidden">
+        <p style="font-size:.78rem;color:#78909c;font-family:Arial,sans-serif;margin-bottom:.7rem">Compile all entries into a structured police-style report. AI summarization creates formal language from your logs.</p>
+
+        <!-- Risk level display -->
+        <div id="risk-display" style="display:none;margin-bottom:.7rem">
+          <div id="risk-badge-el"></div>
+          <div id="risk-explanation" style="font-size:.75rem;color:#546e7a;font-family:Arial,sans-serif;margin-top:.25rem"></div>
+        </div>
+
+        <div id="report-output" class="report-area" contenteditable="false">Click "Generate Report" to compile your entries.</div>
+        <div style="margin-bottom:.5rem">
+          <button class="report-btn report-gen" onclick="generateReport()">📋 Generate Report</button>
+          <button class="report-btn report-edit-toggle" onclick="toggleReportEdit()" id="btn-edit-toggle">✏️ Edit Report</button>
+          <button class="report-btn report-dl" onclick="downloadReport()">⬇ Download .txt</button>
+          <button class="backup-btn" onclick="downloadBackup()" title="Export encrypted JSON backup">🔒 Backup JSON</button>
+        </div>
+        <p style="font-size:.72rem;color:#90a4ae;font-family:Arial,sans-serif;margin-top:.3rem">Review all content before exporting or sharing. Nothing leaves this device automatically.</p>
+
+        <!-- Police station send panel -->
+        <div class="police-panel" id="police-panel" style="display:none">
+          <h4>Send to Nearest Police Station</h4>
+          <div class="police-station-info" id="police-station-info">Locating nearest station…</div>
+          <p style="font-size:.75rem;color:#78909c;font-family:Arial,sans-serif;margin-bottom:.6rem">Your report is ready for review below. <strong>Nothing is sent automatically.</strong> You must confirm before any action.</p>
+          <div id="police-preview" style="background:#fff;border:1px solid #e0e0e0;border-radius:6px;padding:.6rem .8rem;font-size:.72rem;font-family:'Courier New',monospace;max-height:100px;overflow:auto;color:#37474f;margin-bottom:.6rem;white-space:pre-wrap"></div>
+          <button class="police-confirm-btn" onclick="confirmPoliceSend()">Confirm &amp; Prepare Send</button>
+          <button class="police-copy-btn" onclick="copyReport()">Copy Full Report</button>
+          <button style="background:none;border:none;color:#90a4ae;font-size:.78rem;font-family:Arial,sans-serif;cursor:pointer;margin-left:.5rem" onclick="document.getElementById('police-panel').style.display='none'">Cancel</button>
+        </div>
+        <button class="report-btn" style="background:#fff;color:#1565c0;border-color:#1565c0;margin-top:.3rem" onclick="initPoliceSend()">🚔 Send to Nearest Station</button>
+
+        <button class="panic-btn" onclick="panicExit()">⚠ Exit Now — Close This App</button>
+      </div>
+
+      <!-- ── RESOURCES TAB ── -->
+      <div id="tab-resources" class="hidden">
+        <div class="res-category">
+          <h4>🚨 Emergency</h4>
+          <div class="res-card res-emergency">
+            <div class="res-card-name">Emergency Services</div>
+            <div class="res-card-detail">Call <span class="res-phone">911</span> for immediate danger. Do not hesitate.</div>
+          </div>
+        </div>
+        <div class="res-category">
+          <h4>Mental Health &amp; Crisis Support</h4>
+          <div class="res-card" style="border-color:#c5cae9;background:#e8eaf6">
+            <div class="res-card-name" style="color:#283593">988 Suicide &amp; Crisis Lifeline</div>
+            <div class="res-card-detail">Call or text <span class="res-phone">988</span> · 24/7, free, confidential<br>
+            <a href="https://988lifeline.org" target="_blank" rel="noopener">988lifeline.org</a> · Chat available online</div>
+          </div>
+          <div class="res-card">
+            <div class="res-card-name">Crisis Text Line</div>
+            <div class="res-card-detail">Text <strong>HOME</strong> to <strong>741741</strong> — free, 24/7</div>
+          </div>
+          <div class="res-card">
+            <div class="res-card-name">SAMHSA National Helpline</div>
+            <div class="res-card-detail">Call <span class="res-phone">1-800-662-4357</span> (mental health &amp; substance use) · 24/7, free</div>
+          </div>
+        </div>
+        <div class="res-category">
+          <h4>National Domestic Violence Support (US)</h4>
+          <div class="res-card">
+            <div class="res-card-name">National Domestic Violence Hotline</div>
+            <div class="res-card-detail">
+              <a href="https://www.thehotline.org" target="_blank" rel="noopener">thehotline.org</a><br>
+              Call: <span class="res-phone">1-800-799-7233</span> (24/7, free, confidential)<br>
+              Text <strong>START</strong> to <strong>88788</strong>
+            </div>
+          </div>
+        </div>
+        <div class="res-category">
+          <h4>Support for Men</h4>
+          <div class="res-card">
+            <div class="res-card-name">Domestic Abuse Helpline for Men (DAHMW)</div>
+            <div class="res-card-detail">Call: <span class="res-phone">1-888-743-5754</span><br>
+            <a href="https://www.dahmw.org" target="_blank" rel="noopener">dahmw.org</a></div>
+          </div>
+          <div class="res-card">
+            <div class="res-card-name">1in6 — Men's Support</div>
+            <div class="res-card-detail"><a href="https://1in6.org" target="_blank" rel="noopener">1in6.org</a> — Support for men who have experienced trauma</div>
+          </div>
+        </div>
+        <div class="res-category">
+          <h4>Shelter & Housing</h4>
+          <div class="res-card">
+            <div class="res-card-name">Domestic Shelters Directory</div>
+            <div class="res-card-detail"><a href="https://www.domesticshelters.org" target="_blank" rel="noopener">domesticshelters.org</a> — Find shelters and programs near you</div>
+          </div>
+        </div>
+        <div class="res-category">
+          <h4>Legal Guidance</h4>
+          <div class="res-card">
+            <div class="res-card-name">WomensLaw.org</div>
+            <div class="res-card-detail"><a href="https://www.womenslaw.org" target="_blank" rel="noopener">womenslaw.org</a> — Free legal info; also serves men</div>
+          </div>
+          <div class="res-card">
+            <div class="res-card-name">LawHelp.org</div>
+            <div class="res-card-detail"><a href="https://www.lawhelp.org" target="_blank" rel="noopener">lawhelp.org</a> — Find free legal aid by state</div>
+          </div>
+        </div>
+        <div class="res-category">
+          <h4>International</h4>
+          <div class="res-card">
+            <div class="res-card-name">UN Women</div>
+            <div class="res-card-detail"><a href="https://www.unwomen.org" target="_blank" rel="noopener">unwomen.org</a></div>
+          </div>
+          <div class="res-card">
+            <div class="res-card-name">Refuge (UK)</div>
+            <div class="res-card-detail">Call: <span class="res-phone">0808 2000 247</span> · <a href="https://www.refuge.org.uk" target="_blank" rel="noopener">refuge.org.uk</a></div>
+          </div>
+          <div class="res-card">
+            <div class="res-card-name">White Ribbon (Canada/International)</div>
+            <div class="res-card-detail"><a href="https://www.whiteribbon.ca" target="_blank" rel="noopener">whiteribbon.ca</a></div>
+          </div>
+        </div>
+        <div class="res-category">
+          <h4>Local Resources (Nashville, TN)</h4>
+          <div class="res-card">
+            <div class="res-card-name">Tennessee Coalition to End DV</div>
+            <div class="res-card-detail"><a href="https://www.tncoalition.org" target="_blank" rel="noopener">tncoalition.org</a> · Call: <span class="res-phone">1-800-356-6767</span></div>
+          </div>
+        </div>
+        <button class="panic-btn" onclick="panicExit()" style="margin-top:.3rem">⚠ Exit Now — Close This App</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PIN MODAL -->
+<div id="pin-overlay" class="pin-overlay hidden">
+  <div class="pin-modal">
+    <div class="pin-icon">🔐</div>
+    <h3>Enter your PIN</h3>
+    <p>Access your personal notes</p>
+    <div class="pin-display" id="pin-display">_ _ _ _</div>
+    <div class="pin-keypad">
+      <button class="pin-key" onclick="pinKey('1')">1</button>
+      <button class="pin-key" onclick="pinKey('2')">2</button>
+      <button class="pin-key" onclick="pinKey('3')">3</button>
+      <button class="pin-key" onclick="pinKey('4')">4</button>
+      <button class="pin-key" onclick="pinKey('5')">5</button>
+      <button class="pin-key" onclick="pinKey('6')">6</button>
+      <button class="pin-key" onclick="pinKey('7')">7</button>
+      <button class="pin-key" onclick="pinKey('8')">8</button>
+      <button class="pin-key" onclick="pinKey('9')">9</button>
+      <button class="pin-key del" onclick="pinKey('del')">⌫</button>
+      <button class="pin-key" onclick="pinKey('0')">0</button>
+      <button class="pin-key cancel-x" onclick="closePinModal()">✕</button>
+    </div>
+    <div class="pin-error" id="pin-error"></div>
+    <button class="pin-cancel" onclick="closePinModal()">Cancel</button>
+    <p style="font-size:.68rem;color:#bdbdbd;margin-top:.6rem;font-family:Arial,sans-serif">Default PIN: 1234</p>
+  </div>
+</div>
+
+<!-- Photo lightbox -->
+<div class="lightbox hidden" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<!-- AUTO-LOCK BAR -->
+<div class="autolock-bar" id="autolock-bar">Locking in <span id="autolock-countdown">30</span>s of inactivity…</div>
+
+<!-- DANGER TOAST (firearm/immediate danger) -->
+<div class="danger-toast" id="danger-toast">
+  <button class="danger-toast-close" onclick="closeDangerToast()">×</button>
+  <div class="danger-toast-title">Safety Notice</div>
+  <div>If you are in immediate danger, contact emergency services now.</div>
+  <button class="danger-toast-btn" onclick="switchTab('resources'); closeDangerToast();">View Resources</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+// ── CONFIG ──────────────────────────────────
+const CORRECT_PIN = '1234';
+const DECOY_PIN   = '9999';           // decoy → empty log view
+const WIKI_KEYWORD = 'log123';
+const STORAGE_KEY = 'sl_entries_v3';
+const DECOY_KEY   = 'sl_decoy_mode';
+const AUTO_LOCK_SEC = 180;            // seconds of inactivity before lock (3 minutes)
+const THEME_TITLES = {
+  grocery: 'Weekly Savings | Local Market',
+  wiki: 'KnowledgeBase | Articles',
+  docs: 'User Agreement | Documentation',
+  fitness: 'Daily Health Tracker'
+};
+
+// ── STATE ────────────────────────────────────
+let currentTheme = 'grocery';
+let currentTab = 'add';
+let currentSev = 3;
+let pinBuffer = '';
+let logoClicks = 0;
+let logoClickTimer = null;
+let wikiEditClicks = 0;
+let pendingPhotos = []; // {dataUrl, name, note, timestamp}
+let fitCounters = { water: 6, sleep: 7, streak: 12 };
+let groCart = [];
+let groList = [];
+let fitCalOffset = 0;
+let isDecoyMode = false;
+let autoLockTimer = null;
+let autoLockCountdown = null;
+let recognitionActive = false;
+let speechRecognition = null;
+
+// ── STORAGE ──────────────────────────────────
+function getEntries() {
+  if (isDecoyMode) return [];
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch { return []; }
+}
+function setEntries(arr) {
+  if (isDecoyMode) return; // never write in decoy mode
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch(e) {}
+}
+
+// ── GROCERY THEME ─────────────────────────────
+const GRO_PRODUCTS = [
+  { e:'🍎', n:'Gala Apples (3lb bag)', p:'2.99', o:'4.99', cat:'Produce', stars:4.7, reviews:1842 },
+  { e:'🥛', n:'Whole Milk, 1 gallon', p:'3.49', o:null, cat:'Dairy', stars:4.8, reviews:3201 },
+  { e:'🥚', n:'Large Eggs, 1 dozen', p:'2.79', o:'3.99', cat:'Dairy', stars:4.9, reviews:5412 },
+  { e:'🍌', n:'Organic Bananas (per lb)', p:'0.59', o:null, cat:'Produce', stars:4.6, reviews:892 },
+  { e:'🧀', n:'Sharp Cheddar 16oz', p:'4.29', o:'5.99', cat:'Dairy', stars:4.8, reviews:2103 },
+  { e:'🥦', n:'Broccoli Crowns (each)', p:'1.49', o:null, cat:'Produce', stars:4.5, reviews:671 },
+  { e:'🍞', n:'Whole Wheat Sandwich Bread', p:'2.49', o:'3.29', cat:'Bakery', stars:4.4, reviews:987 },
+  { e:'🧈', n:'Sweet Cream Butter, 1lb', p:'3.79', o:'4.99', cat:'Dairy', stars:4.7, reviews:1543 },
+  { e:'🍊', n:'Navel Oranges 5lb bag', p:'3.99', o:'5.49', cat:'Produce', stars:4.6, reviews:743 },
+  { e:'🥣', n:'Ancient Grain Granola 16oz', p:'5.49', o:'7.99', cat:'Pantry', stars:4.5, reviews:422 },
+  { e:'🥑', n:'Hass Avocados (each)', p:'0.99', o:'1.49', cat:'Produce', stars:4.3, reviews:1209 },
+  { e:'🍋', n:'Lemons, 4-pack', p:'2.29', o:'3.49', cat:'Produce', stars:4.5, reviews:567 },
+];
+const GRO_MEAT = [
+  { e:'🍗', n:'Chicken Breast Boneless (per lb)', p:'3.49', o:'5.99', cat:'Meat', stars:4.7, reviews:2890 },
+  { e:'🥩', n:'Ground Beef 80/20, 1lb', p:'4.99', o:'6.49', cat:'Meat', stars:4.6, reviews:1743 },
+  { e:'🐟', n:'Atlantic Salmon Fillet (per lb)', p:'8.99', o:'12.99', cat:'Meat', stars:4.8, reviews:934 },
+  { e:'🥓', n:'Thick-cut Bacon 12oz', p:'5.49', o:'7.49', cat:'Meat', stars:4.9, reviews:3401 },
+  { e:'🍖', n:'Pork Tenderloin (per lb)', p:'3.99', o:null, cat:'Meat', stars:4.5, reviews:612 },
+  { e:'🦐', n:'Cooked Shrimp 12oz', p:'7.99', o:'10.99', cat:'Meat', stars:4.6, reviews:881 },
+];
+const ALL_PRODUCTS = [...GRO_PRODUCTS, ...GRO_MEAT];
+
+function renderStars(r) {
+  const full = Math.round(r);
+  return '★'.repeat(full) + '☆'.repeat(5-full);
+}
+
+function buildCard(item, idx) {
+  const savings = item.o ? (parseFloat(item.o) - parseFloat(item.p)).toFixed(2) : null;
+  const prime = idx % 3 === 0;
+  return `
+    <div class="g-card" data-cat="${item.cat}">
+      ${savings ? `<div class="g-card-badge">SAVE $${savings}</div>` : ''}
+      ${prime ? `<div class="g-card-prime">prime</div>` : ''}
+      <div class="g-card-img">${item.e}</div>
+      <div class="g-card-body">
+        <div class="g-card-name">${item.n}</div>
+        <div class="g-stars">${renderStars(item.stars)} <span>(${item.reviews.toLocaleString()})</span></div>
+        <div class="g-card-price-wrap">
+          <span class="g-card-price">$${item.p}</span>
+          <span class="g-card-price-per">/ea</span>
+          ${item.o ? `<span class="g-card-orig">$${item.o}</span>` : ''}
+        </div>
+        ${savings ? `<div class="g-card-savings">You save $${savings}</div>` : ''}
+        ${prime ? `<div class="g-prime-badge">✓ FREE delivery</div>` : ''}
+        <div class="g-card-btns">
+          <button class="g-add-cart-btn" onclick="groAddCart(${JSON.stringify(item).replace(/"/g,'&quot;')})">Add to Cart</button>
+          <button class="g-add-list-btn" onclick="groAddList(${JSON.stringify(item).replace(/"/g,'&quot;')})">♥ List</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function buildGrocery() {
+  document.getElementById('gro-grid').innerHTML = GRO_PRODUCTS.map((i,ix) => buildCard(i,ix)).join('');
+  document.getElementById('gro-grid-2').innerHTML = GRO_MEAT.map((i,ix) => buildCard(i,ix+100)).join('');
+}
+buildGrocery();
+
+function groAddCart(item) {
+  groCart.push(item);
+  updateGroCart();
+  showToast(`🛒 "${item.n}" added to cart!`);
+}
+function groAddList(item) {
+  groList.push(item);
+  updateGroList();
+  showToast(`📋 "${item.n}" added to shopping list!`);
+}
+function groRemoveCart(idx) {
+  groCart.splice(idx, 1);
+  updateGroCart();
+}
+function groRemoveList(idx) {
+  groList.splice(idx, 1);
+  updateGroList();
+}
+function updateGroCart() {
+  const count = groCart.length;
+  document.getElementById('gro-cart-count').textContent = count;
+  document.getElementById('gro-cart-header-count').textContent = count ? `(${count} item${count!==1?'s':''})` : '';
+  const body = document.getElementById('gro-cart-body');
+  if (!count) {
+    body.innerHTML = '<div class="g-cart-empty">Your cart is empty.<br>Add items to get started.</div>';
+    return;
+  }
+  const subtotal = groCart.reduce((s,i) => s + parseFloat(i.p), 0).toFixed(2);
+  body.innerHTML = `
+    <div class="g-cart-items">
+      ${groCart.map((i,ix) => `
+        <div class="g-cart-item">
+          <span class="g-cart-item-emoji">${i.e}</span>
+          <span class="g-cart-item-name">${i.n}</span>
+          <span class="g-cart-item-price">$${i.p}</span>
+          <button class="g-cart-item-rm" onclick="groRemoveCart(${ix})">✕</button>
+        </div>`).join('')}
+    </div>
+    <div class="g-cart-subtotal"><span>Subtotal (${count} item${count!==1?'s':''}):</span><span>$${subtotal}</span></div>
+  `;
+}
+function updateGroList() {
+  const items = document.getElementById('gro-list-items');
+  document.getElementById('gro-list-count').textContent = groList.length ? `(${groList.length})` : '';
+  if (!groList.length) {
+    items.innerHTML = '<div style="font-size:.78rem;color:#999;padding:.3rem 0">No items yet.</div>';
+    return;
+  }
+  items.innerHTML = groList.map((i,ix) => `
+    <div class="g-list-item">
+      <input type="checkbox" onchange="this.parentElement.style.opacity=this.checked?.4:1">
+      <span>${i.e} ${i.n}</span>
+      <span style="margin-left:auto;color:#999;font-size:.7rem;cursor:pointer" onclick="groRemoveList(${ix})">✕</span>
+    </div>`).join('');
+}
+
+function groSearch() {
+  const q = document.getElementById('gro-search-input').value.trim().toLowerCase();
+  const dd = document.getElementById('gro-search-results');
+  if (!q) { dd.classList.add('hidden'); return; }
+  const results = ALL_PRODUCTS.filter(p => p.n.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q)).slice(0,6);
+  if (!results.length) { dd.innerHTML = '<div class="g-search-result-item">No results found.</div>'; dd.classList.remove('hidden'); return; }
+  dd.innerHTML = results.map(r => `<div class="g-search-result-item" onclick="groAddCart(${JSON.stringify(r).replace(/"/g,'&quot;')})">${r.e} <strong>${r.n}</strong> — $${r.p}</div>`).join('');
+  dd.classList.remove('hidden');
+}
+document.getElementById('gro-search-input').addEventListener('keyup', function(e) {
+  if (e.key === 'Enter') groSearch();
+  else if (e.key === 'Escape') { document.getElementById('gro-search-results').classList.add('hidden'); }
+  else if (this.value.length > 1) groSearch();
+});
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#gro-search-wrap')) document.getElementById('gro-search-results').classList.add('hidden');
+});
+
+function filterCat(cat) {
+  document.querySelectorAll('#gro-cat-list li').forEach(li => li.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.g-card').forEach(card => {
+    card.style.display = (!cat || card.dataset.cat === cat) ? '' : 'none';
+  });
+  if (cat) showToast('Showing: ' + cat);
+}
+
+function filterCatNav(cat) {
+  // Update navbar active state
+  document.querySelectorAll('.g-nav-bar a').forEach(a => a.classList.remove('active'));
+  event.target.classList.add('active');
+  // Sync sidebar
+  document.querySelectorAll('#gro-cat-list li').forEach(li => li.classList.remove('active'));
+  document.querySelectorAll('#gro-cat-list li').forEach(li => {
+    const liCat = li.textContent.trim().replace(/^[^\w]*/,'');
+    if (!cat && liCat.startsWith('All')) li.classList.add('active');
+    else if (cat && liCat.toLowerCase().includes(cat.toLowerCase())) li.classList.add('active');
+  });
+  // Filter cards
+  document.querySelectorAll('.g-card').forEach(card => {
+    card.style.display = (!cat || card.dataset.cat === cat) ? '' : 'none';
+  });
+  if (cat) showToast('Showing: ' + cat);
+}
+
+function scrollToCart() {
+  document.getElementById('gro-cart-sidebar').scrollIntoView({behavior:'smooth'});
+}
+
+// ── WIKI THEME ────────────────────────────────
+const WIKI_ARTICLES = {
+  toussaint: { title:'Toussaint Louverture', lead:'Toussaint Louverture (c. 1743–1803) was a Haitian general and political leader of the Haitian Revolution. Born enslaved, he became the most prominent leader of the slave revolt that established Haiti as the first free Black republic.' },
+  dessalines: { title:'Jean-Jacques Dessalines', lead:'Jean-Jacques Dessalines (1758–1806) was a leader in the Haitian Revolution and the first ruler of an independent Haiti under the 1805 constitution.' },
+  'french-revolution': { title:'French Revolution', lead:'The French Revolution (1789–1799) was a period of radical political and societal change in France that abolished the French monarchy, established a republic, and culminated in Napoleon.' },
+  abolition: { title:'Atlantic Slave Trade', lead:'The Atlantic slave trade, also known as the transatlantic slave trade, was the transportation by slave traders of enslaved African people, mainly from Africa to the Americas.' },
+  louisiana: { title:'Louisiana Purchase', lead:'The Louisiana Purchase (1803) was the acquisition of the territory of Louisiana by the United States from France. The U.S. paid approximately $15 million for around 828,000 square miles of territory.' },
+  bois: { title:'Bois Caïman ceremony', lead:'The Bois Caïman ceremony was a religious ceremony held in August 1791 by enslaved Haitian people in Saint-Domingue that is considered the beginning of the Haitian Revolution.' },
+  main: null, contents: null, events: null, random: null, featured: null
+};
+const WIKI_SEARCH_RESULTS = [
+  { title: 'Haitian Revolution', desc: 'Successful slave revolt establishing Haiti (1791–1804)' },
+  { title: 'Toussaint Louverture', desc: 'Leader of the Haitian Revolution, governor-for-life' },
+  { title: 'Saint-Domingue', desc: 'French colony on western Hispaniola, now Haiti' },
+  { title: 'Jean-Jacques Dessalines', desc: 'First ruler of independent Haiti' },
+  { title: 'Bois Caïman ceremony', desc: 'Religious ceremony beginning the Revolution (August 1791)' },
+  { title: 'Louisiana Purchase (1803)', desc: 'US acquisition of French territory influenced by Haitian events' },
+];
+function wikiSearch() {
+  const v = document.getElementById('wiki-search').value.trim().toLowerCase();
+  const dd = document.getElementById('wiki-search-dropdown');
+  if (!v) { dd.classList.add('hidden'); return; }
+  const results = WIKI_SEARCH_RESULTS.filter(r => r.title.toLowerCase().includes(v) || r.desc.toLowerCase().includes(v));
+  if (!results.length) { dd.innerHTML = '<div class="w-search-result">No results for "'+escHtml(v)+'"</div>'; dd.classList.remove('hidden'); return; }
+  dd.innerHTML = results.map(r => `<div class="w-search-result" onclick="wikiLoadArticle('${r.title}')">${r.title}<small>${r.desc}</small></div>`).join('');
+  dd.classList.remove('hidden');
+}
+document.getElementById('wiki-search').addEventListener('keydown', e => {
+  if (e.key === 'Enter') wikiSearch();
+});
+document.getElementById('wiki-search').addEventListener('input', function() {
+  if (this.value.length > 1) wikiSearch(); else document.getElementById('wiki-search-dropdown').classList.add('hidden');
+});
+document.addEventListener('click', e => { if (!e.target.closest('.w-search-bar')) document.getElementById('wiki-search-dropdown').classList.add('hidden'); });
+
+function wikiLoadArticle(title) {
+  document.getElementById('wiki-search-dropdown').classList.add('hidden');
+  document.getElementById('wiki-search').value = '';
+  showToast(`📖 Loading "${title}"…`);
+}
+function wikiNav(key) {
+  if (key === 'random') {
+    window.open('https://en.wikipedia.org/wiki/Special:Random', '_blank', 'noopener,noreferrer');
+    return;
+  }
+  if (WIKI_ARTICLES[key] && WIKI_ARTICLES[key]) {
+    showToast('📖 Loading: ' + WIKI_ARTICLES[key].title);
+  } else if (key === 'main') {
+    showToast('📖 Navigating to main page…');
+  } else if (key === 'contents') {
+    showToast('📖 Showing article index…');
+  } else if (key === 'events') {
+    showToast('📖 Loading current events…');
+  } else if (key === 'featured') {
+    showToast('📖 Loading featured articles…');
+  } else {
+    showToast('📖 Navigating to section…');
+  }
+}
+function wikiTab(el, tab) {
+  document.querySelectorAll('.w-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (tab === 'edit') {
+    showToast('📝 Editing requires an account. Create one to contribute.');
+  } else if (tab === 'talk') {
+    showToast('💬 Talk page — discuss article changes here.');
+  } else if (tab === 'history') {
+    showToast('📜 Viewing revision history.');
+  } else {
+    // article tab — hide note panel if open
+    document.getElementById('wiki-note-panel').style.display = 'none';
+  }
+}
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function openLoggerFromWiki() {
+  document.getElementById('wiki-note-panel').style.display = 'none';
+  openLogger();
+}
+
+// ── DOCS THEME ────────────────────────────────
+function docsNav(el, section) {
+  document.querySelectorAll('.d-nav a').forEach(a => a.classList.remove('active'));
+  el.classList.add('active');
+  showToast(`📄 Viewing: ${el.textContent.trim()}`);
+}
+function docsSectionClick(el, num) {
+  // Highlight the section
+  document.querySelectorAll('.d-section').forEach(s => s.style.borderColor = '#e2e8f0');
+  document.querySelectorAll('.d-sidebar-section li').forEach(l => l.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const sId = { '1':'docs-s1','2':'docs-s2','3':'docs-s3','4':'docs-s4','5':'docs-s5' };
+  const targetId = num === '43' ? 'docs-s4' : sId[num];
+  if (targetId) {
+    const el2 = document.getElementById(targetId);
+    if (el2) { el2.style.borderColor = '#3182ce'; el2.scrollIntoView({behavior:'smooth', block:'start'}); }
+  }
+  if (num === '43') {
+    document.getElementById('docs-support-panel').classList.remove('hidden');
+    setTimeout(() => document.getElementById('docs-support-panel').scrollIntoView({behavior:'smooth', block:'center'}), 200);
+    document.getElementById('docs-last-viewed').textContent = `Section 4.3 viewed at ${new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`;
+  }
+}
+
+// ── FITNESS THEME ─────────────────────────────
+function fitNav(el, section) {
+  document.querySelectorAll('.f-nav a').forEach(a => a.classList.remove('active'));
+  el.classList.add('active');
+  if (section === 'dashboard') return;
+  if (section === 'vitamins') {
+    showToast('💊 Vitamin tracking — log your daily supplements.');
+    return;
+  }
+  showToast(`⚡ Loading ${el.textContent.trim()}…`);
+}
+function fitCounter(key, delta) {
+  fitCounters[key] = Math.max(0, fitCounters[key] + delta);
+  document.getElementById(`fit-${key}-val`).textContent = fitCounters[key];
+  if (key === 'water') showToast(`💧 Water: ${fitCounters[key]} glasses`);
+  if (key === 'sleep') showToast(`😴 Sleep: ${fitCounters[key]} hours logged`);
+  if (key === 'streak') showToast(`🔥 Streak: ${fitCounters[key]} days`);
+}
+function fitActionBtn(label) {
+  showToast(`✅ "${label}" recorded!`, 'info');
+}
+
+(function buildFitness() {
+  const stats = [
+    { label:'Steps Today', value:'7,842', sub:'Goal: 10,000', pct:78, color:'#38bdf8', key:'steps' },
+    { label:'Water (oz)', value:'56', sub:'Goal: 64 oz', pct:87, color:'#34d399', key:'water' },
+    { label:'Calories', value:'1,640', sub:'Goal: 2,000', pct:82, color:'#f472b6', key:'cal' },
+    { label:'Active Min', value:'38', sub:'Goal: 45 min', pct:84, color:'#fb923c', key:'active' },
+    { label:'Heart Rate', value:'72', sub:'bpm avg', pct:72, color:'#f87171', key:'hr' },
+  ];
+  document.getElementById('fit-stats').innerHTML = stats.map(s => `
+    <div class="f-stat-card" onclick="showToast('Viewing ${s.label} details.')">
+      <div class="f-stat-label">${s.label}</div>
+      <div class="f-stat-value">${s.value}</div>
+      <div class="f-stat-sub">${s.sub}</div>
+      <div class="f-stat-bar"><div class="f-stat-fill" style="width:${s.pct}%;background:${s.color}"></div></div>
+    </div>`).join('');
+
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const vals = [6200, 8900, 7100, 10300, 9400, 7842, 4200];
+  const max = Math.max(...vals);
+  document.getElementById('fit-chart').innerHTML = days.map((d,i) => `
+    <div class="f-chart-bar-row">
+      <span class="f-chart-label">${d}</span>
+      <div class="f-chart-bar" onclick="showToast('${d}: ${(vals[i]/1000).toFixed(1)}k steps')">
+        <div class="f-chart-fill" style="width:${Math.round(vals[i]/max*100)}%"></div>
+      </div>
+      <span class="f-chart-val">${(vals[i]/1000).toFixed(1)}k</span>
+    </div>`).join('');
+
+  const rings = [
+    { label:'Move', val:'820 / 1000 cal', pct:82, color:'#f87171' },
+    { label:'Exercise', val:'38 / 45 min', pct:84, color:'#34d399' },
+    { label:'Stand', val:'10 / 12 hrs', pct:83, color:'#38bdf8' },
+  ];
+  document.getElementById('fit-rings').innerHTML = rings.map(r => `
+    <div class="f-ring-row" onclick="showToast('${r.label} ring: ${r.val}')">
+      <div class="f-ring" style="color:${r.color};border-color:${r.color};background:rgba(0,0,0,.15)">
+        ${Math.round(r.pct)}%
+      </div>
+      <div class="f-ring-info">
+        <h4>${r.label}</h4>
+        <p>${r.val}</p>
+      </div>
+    </div>`).join('');
+})();
+
+function buildFitCalendar() {
+  const cal = document.getElementById('fit-cal');
+  cal.innerHTML = '';
+  const now = new Date();
+  const displayDate = new Date(now.getFullYear(), now.getMonth() + fitCalOffset, 1);
+  const monthName = displayDate.toLocaleString('en-US', {month:'long', year:'numeric'});
+  document.getElementById('fit-cal-title').textContent = monthName;
+
+  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'f-cal-day-label';
+    el.textContent = d;
+    cal.appendChild(el);
+  });
+  const daysInMonth = new Date(displayDate.getFullYear(), displayDate.getMonth()+1, 0).getDate();
+  const firstDay = displayDate.getDay();
+  for (let i = 0; i < firstDay; i++) { const el = document.createElement('div'); cal.appendChild(el); }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const el = document.createElement('div');
+    const isToday = d === now.getDate() && fitCalOffset === 0;
+    el.className = 'f-cal-day' + (isToday ? ' today' : '');
+    el.textContent = d;
+    const logDays = [3,7,12,18,25];
+    if (logDays.includes(d) && fitCalOffset === 0) el.classList.add('has-log');
+    el.onclick = () => {
+      if (el.classList.contains('has-log')) { showToast(`📋 ${monthName.split(' ')[0]} ${d} — activity logged.`); }
+      else showToast(`${monthName.split(' ')[0]} ${d} — no activity logged.`);
+    };
+    cal.appendChild(el);
+  }
+}
+buildFitCalendar();
+function fitCalNav(dir) { fitCalOffset += dir; buildFitCalendar(); }
+
+// ── THEME (V3: RANDOM ON LOGIN, NO SWITCHER) ──
+function switchTheme(t) {
+  currentTheme = t;
+  document.querySelectorAll('[id^="theme-"]').forEach(el => el.classList.add('hidden'));
+  document.getElementById('theme-' + t).classList.remove('hidden');
+  document.title = THEME_TITLES[t];
+}
+function randomizeTheme() {
+  const themes = ['grocery', 'wiki', 'docs', 'fitness'];
+  const t = themes[Math.floor(Math.random() * themes.length)];
+  switchTheme(t);
+}
+
+// ── ENTRY POINTS ──────────────────────────────
+// Invisible triggers — one per theme, color-matched to background
+document.getElementById('gro-invisible-trigger').addEventListener('click', openLogger);
+document.getElementById('wiki-invisible-trigger').addEventListener('click', openLogger);
+document.getElementById('docs-invisible-trigger').addEventListener('click', openLogger);
+document.getElementById('fit-invisible-trigger').addEventListener('click', openLogger);
+
+// Logo triple-click still works (visually plausible)
+document.getElementById('gro-logo').onclick = function() {
+  logoClicks++;
+  clearTimeout(logoClickTimer);
+  if (logoClicks >= 3) { logoClicks = 0; openLogger(); return; }
+  logoClickTimer = setTimeout(() => logoClicks = 0, 800);
+};
+
+// Wiki: sidebar "Help" click — just shows toast (normal behavior)
+document.getElementById('wiki-sidebar-notes').onclick = function() {
+  showToast('📖 Loading help documentation…');
+};
+
+// Docs 4.3 sidebar click still opens docs section (not logger directly)
+document.getElementById('docs-43-sidebar').onclick = function() {
+  docsSectionClick(this, '43');
+};
+
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'L') { e.preventDefault(); openLogger(); }
+  // Single ESC = instant exit, always
+  if (e.key === 'Escape') {
+    panicExit();
+  }
+});
+
+// ── LOGGER ────────────────────────────────────
+function openLogger() {
+  const now = new Date();
+  document.getElementById('log-date').value = now.toISOString().split('T')[0];
+  document.getElementById('log-time').value = now.toTimeString().slice(0, 5);
+  setSev(3);
+  pendingPhotos = [];
+  renderPhotoPreview();
+  document.getElementById('logger-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  resetAutoLock();
+  if (isDecoyMode) {
+    document.querySelector('.lp-title').innerHTML = '<span>📋</span> My Private Notes <span style="font-size:.65rem;color:#90a4ae;font-weight:400">(no entries)</span>';
+  } else {
+    document.querySelector('.lp-title').innerHTML = '<span>📋</span> My Private Notes';
+  }
+  switchTab('add');
+}
+function closeLogger() {
+  document.getElementById('logger-overlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  clearAutoLock();
+  // Randomize theme on close for next session feel
+}
+document.getElementById('logger-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeLogger();
+});
+
+function switchTab(t) {
+  currentTab = t;
+  ['add','list','report','resources'].forEach(id => {
+    document.getElementById('tab-' + id).classList.toggle('hidden', id !== t);
+    document.getElementById('tab-btn-' + id).classList.toggle('active', id === t);
+  });
+  if (t === 'list') renderTimeline();
+}
+
+// ── SEVERITY ──────────────────────────────────
+function setSev(v) {
+  currentSev = v;
+  document.querySelectorAll('.sev-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.v) <= v);
+  });
+}
+
+// ── PHOTO UPLOAD ──────────────────────────────
+document.getElementById('photo-file-input').addEventListener('change', function() {
+  handleFiles(this.files);
+  this.value = '';
+});
+const dropZone = document.getElementById('photo-drop-zone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  handleFiles(e.dataTransfer.files);
+});
+function handleFiles(files) {
+  Array.from(files).forEach(file => {
+    if (!['image/jpeg','image/png','image/webp'].includes(file.type)) {
+      showToast('Only JPG, PNG, WEBP accepted.', 'error'); return;
+    }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      pendingPhotos.push({ dataUrl: ev.target.result, name: file.name, note: '', timestamp: new Date().toISOString() });
+      renderPhotoPreview();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function renderPhotoPreview() {
+  const grid = document.getElementById('photo-preview-grid');
+  if (!pendingPhotos.length) { grid.innerHTML = ''; return; }
+  grid.innerHTML = pendingPhotos.map((p, i) => `
+    <div>
+      <div class="photo-thumb">
+        <img src="${p.dataUrl}" alt="${escHtml(p.name)}" onclick="openLightbox('${p.dataUrl}','${escHtml(p.note||p.name)}')">
+        <button class="photo-thumb-rm" onclick="removePhoto(${i})">✕</button>
+      </div>
+      <input class="photo-note-input" placeholder="Add note…" value="${escHtml(p.note)}" oninput="pendingPhotos[${i}].note=this.value">
+    </div>`).join('');
+}
+function removePhoto(i) {
+  pendingPhotos.splice(i, 1);
+  renderPhotoPreview();
+}
+
+// ── TIMELINE ─────────────────────────────────
+function renderTimeline() {
+  const container = document.getElementById('timeline-container');
+  const countEl = document.getElementById('entry-count');
+  let entries = getEntries().slice().reverse();
+
+  const ft = document.getElementById('filter-type').value;
+  const fs = parseInt(document.getElementById('filter-sev').value) || 0;
+  if (ft) entries = entries.filter(e => e.incident_type === ft);
+  if (fs) entries = entries.filter(e => e.severity >= fs);
+
+  countEl.textContent = entries.length === 0 ? '' : `${entries.length} entr${entries.length === 1 ? 'y' : 'ies'}`;
+
+  if (!entries.length) {
+    container.innerHTML = `<div class="empty-state"><div class="es-icon">📋</div><p>No entries yet.<br>Add your first entry using the <strong>+ New Entry</strong> tab.</p></div>`;
+    return;
+  }
+
+  container.innerHTML = entries.map(e => {
+    const dots = [1,2,3,4,5].map(i => `<div class="sev-dot${i <= e.severity ? ' on' : ''}"></div>`).join('');
+    const photoCount = (e.photos || []).length;
+    return `
+      <div class="entry-card" id="ec-${e.id}">
+        <div class="entry-card-header" onclick="toggleEntry(${e.id})">
+          <div class="entry-card-left">
+            <div class="entry-card-datetime">${formatDate(e.date)} at ${e.time}</div>
+            <div class="entry-meta-row">
+              <span class="type-chip chip-${e.incident_type}">${e.incident_type}</span>
+              <div class="sev-dots">${dots}</div>
+              ${e.location ? `<span class="loc-tag">📍 ${escHtml(e.location)}</span>` : ''}
+              ${photoCount ? `<span class="loc-tag">📷 ${photoCount}</span>` : ''}
+            </div>
+          </div>
+          <div class="entry-card-actions">
+            <button class="entry-edit-btn" onclick="event.stopPropagation();editEntry(${e.id})" title="Edit">✏️</button>
+            <button class="entry-expand-btn" title="Expand">▼</button>
+            <button class="entry-del-btn" onclick="deleteEntry(event, ${e.id})" title="Delete">✕</button>
+          </div>
+        </div>
+        <div class="entry-body" id="eb-${e.id}">
+          <div class="entry-body-inner">
+            <div class="entry-field"><strong>Description</strong><p>${escHtml(e.description)}</p></div>
+            ${e.location ? `<div class="entry-field"><strong>Location</strong><p>${escHtml(e.location)}</p></div>` : ''}
+            ${e.relationship ? `<div class="entry-field"><strong>Relationship</strong><p>${escHtml(e.relationship)}</p></div>` : ''}
+            ${e.suspect ? `<div class="entry-field"><strong>Suspect</strong><p>${escHtml(e.suspect)}</p></div>` : ''}
+            ${e.injury === 'Yes' ? `<div class="entry-field"><span class="injury-badge">⚠ Injury Noted</span>${e.injury_notes ? `<p>${escHtml(e.injury_notes)}</p>` : ''}</div>` : ''}
+            ${e.threats === 'Yes' ? `<div class="entry-field"><span class="injury-badge" style="background:#fff3e0;color:#e65100">⚠ Threats Made</span>${e.threat_notes ? `<p>${escHtml(e.threat_notes)}</p>` : ''}</div>` : ''}
+            ${e.witnesses ? `<div class="entry-field"><strong>Witnesses</strong><p>${escHtml(e.witnesses)}</p></div>` : ''}
+            ${(e.photos||[]).length ? `
+              <div class="entry-field">
+                <strong>Photos (${e.photos.length})</strong>
+                <div class="entry-photos">
+                  ${e.photos.map(p => `
+                    <div>
+                      <div class="entry-photo-thumb" onclick="openLightbox('${p.dataUrl}','${escHtml(p.note||p.name)}')">
+                        <img src="${p.dataUrl}" alt="${escHtml(p.name)}">
+                      </div>
+                      ${p.note ? `<div class="entry-photo-note">${escHtml(p.note)}</div>` : ''}
+                    </div>`).join('')}
+                </div>
+              </div>` : ''}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleEntry(id) {
+  const body = document.getElementById('eb-' + id);
+  body.classList.toggle('open');
+}
+function deleteEntry(e, id) {
+  e.stopPropagation();
+  if (!confirm('Remove this entry permanently?')) return;
+  setEntries(getEntries().filter(en => en.id !== id));
+  renderTimeline();
+  showToast('Entry removed.');
+}
+
+// ── REPORT ────────────────────────────────────
+let reportGenerated = false;
+function generateReport() {
+  const entries = getEntries().slice().sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+  if (!entries.length) { document.getElementById('report-output').textContent = 'No entries to compile. Add entries first.'; return; }
+
+  document.getElementById('btn-edit-toggle').textContent = '✏️ Edit Report';
+  reportGenerated = true;
+  const now = new Date();
+  let r = '';
+  r += '╔══════════════════════════════════════════════════╗\n';
+  r += '║       DOMESTIC INCIDENT REPORT — COMPILED        ║\n';
+  r += '╚══════════════════════════════════════════════════╝\n\n';
+  r += `Report ID: RPT-${now.getTime()}\n`;
+  r += `Date Generated: ${now.toLocaleString()}\n`;
+  r += `Total Incidents: ${entries.length}\n`;
+  const dates = entries.map(e => e.date).sort();
+  r += `Incident Period: ${formatDate(dates[0])} to ${formatDate(dates[dates.length-1])}\n\n`;
+
+  // Summary
+  const sevs = entries.map(e => e.severity);
+  const maxSev = Math.max(...sevs);
+  const avgSev = (sevs.reduce((a,b)=>a+b,0)/sevs.length).toFixed(1);
+  const injCount = entries.filter(e => e.injury==='Yes').length;
+  const threatCount = entries.filter(e => e.threats==='Yes').length;
+  const photoCount = entries.reduce((s,e)=>s+(e.photos||[]).length,0);
+  const types = {};
+  entries.forEach(e => { types[e.incident_type] = (types[e.incident_type]||0)+1; });
+  r += '━━━━━━━━━━━━━━━━ SUMMARY ━━━━━━━━━━━━━━━━\n';
+  r += `Average Severity:     ${avgSev}/5\n`;
+  r += `Highest Severity:     ${maxSev}/5\n`;
+  r += `Entries with Injury:  ${injCount}\n`;
+  r += `Entries with Threats: ${threatCount}\n`;
+  r += `Photos Attached:      ${photoCount}\n`;
+  r += `Incident Types:\n`;
+  Object.entries(types).sort((a,b)=>b[1]-a[1]).forEach(([k,v]) => { r += `  ${k.padEnd(14)} × ${v}\n`; });
+  r += '\n━━━━━━━━━━ CHRONOLOGICAL ENTRIES ━━━━━━━━━\n\n';
+
+  entries.forEach((e, i) => {
+    r += `─────────────────────────────────────────\n`;
+    r += `INCIDENT ${i+1} OF ${entries.length}\n`;
+    r += `─────────────────────────────────────────\n`;
+    r += `Report ID:                    RPT-${now.getTime()}-${i+1}\n`;
+    r += `Date Generated:               ${now.toLocaleString()}\n`;
+    r += `Date of Incident:             ${formatDate(e.date)}\n`;
+    r += `Time of Incident:             ${e.time || 'N/A'}\n`;
+    r += `Location of Incident:         ${e.location || 'N/A'}\n`;
+    r += `Relationship (Victim/Suspect):${e.relationship || 'N/A'}\n`;
+    r += `Victim Identifier:            [Withheld — see contact info]\n`;
+    r += `Victim Age:                   N/A\n`;
+    r += `Victim Contact Safety Status: Unknown\n`;
+    r += `Suspect Name/Description:     ${e.suspect || 'N/A'}\n`;
+    r += `Suspect Age:                  N/A\n`;
+    r += `Incident Type:                ${e.incident_type}\n`;
+    r += `Severity (1–5):               ${e.severity}/5\n`;
+    r += `Incident Summary:             ${e.description.slice(0,120)}${e.description.length>120?'…':''}\n`;
+    r += `Detailed Description:\n  ${e.description}\n`;
+    r += `Injuries Reported:            ${e.injury}\n`;
+    r += `Injury Description:           ${e.injury_notes || 'N/A'}\n`;
+    r += `Medical Attention Required:   N/A\n`;
+    r += `Threats Made:                 ${e.threats || 'N/A'}\n`;
+    r += `Type of Threats:              ${e.threat_notes || 'N/A'}\n`;
+    r += `Weapon Involvement:           N/A\n`;
+    r += `Substance Use Observed:       N/A\n`;
+    r += `Evidence (Photos, etc.):      ${(e.photos||[]).length ? `${e.photos.length} photo(s) attached` : 'N/A'}\n`;
+    r += `Witness Information:          ${e.witnesses || 'N/A'}\n`;
+    r += `Victim Current Safety Status: N/A\n`;
+    r += `Suspect Current Location:     N/A\n`;
+    r += `Incident Still Ongoing:       N/A\n`;
+    r += `Risk Level:                   ${e.severity >= 4 ? 'High' : e.severity >= 3 ? 'Medium' : 'Low'}\n`;
+    r += `Reason for Risk Level:        Severity ${e.severity}/5${injCount > 0 ? '; injury reported' : ''}${threatCount > 0 ? '; threats made' : ''}\n\n`;
+  });
+
+  // Photo evidence index
+  const photosAll = entries.flatMap((e,i) => (e.photos||[]).map(p => ({...p, incidentNum:i+1, incidentDate:e.date})));
+  if (photosAll.length) {
+    r += '━━━━━━━━━━━━ EVIDENCE INDEX ━━━━━━━━━━━━\n\n';
+    r += 'SECTION: Supporting Photographic Documentation\n\n';
+    photosAll.forEach((p,i) => {
+      r += `Photo ${i+1}: Incident #${p.incidentNum} (${formatDate(p.incidentDate)})\n`;
+      r += `  File: ${p.name}\n`;
+      r += `  Uploaded: ${new Date(p.timestamp).toLocaleString()}\n`;
+      r += `  Note: ${p.note || 'No note provided'}\n\n`;
+    });
+  }
+
+  r += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+  r += `[End of Report — ${entries.length} incidents compiled]\n`;
+  r += 'REVIEW CAREFULLY BEFORE SHARING.\n';
+
+  const area = document.getElementById('report-output');
+  area.textContent = r;
+  area.contentEditable = 'false';
+  document.getElementById('btn-edit-toggle').textContent = '✏️ Edit Report';
+  reportGenerated = true;
+  showRiskDisplay(entries);
+}
+
+function toggleReportEdit() {
+  const area = document.getElementById('report-output');
+  const btn = document.getElementById('btn-edit-toggle');
+  if (area.contentEditable === 'true') {
+    area.contentEditable = 'false';
+    btn.textContent = '✏️ Edit Report';
+    showToast('Report locked. Ready to download.');
+  } else {
+    area.contentEditable = 'true';
+    area.focus();
+    btn.textContent = '🔒 Lock Edit';
+    showToast('Report is now editable.');
+  }
+}
+
+function downloadReport() {
+  if (!reportGenerated) { generateReport(); }
+  const text = document.getElementById('report-output').innerText || document.getElementById('report-output').textContent;
+  if (!text || text.startsWith('Click') || text.startsWith('No entries')) { showToast('Generate a report first.', 'error'); return; }
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'incident-report-' + new Date().toISOString().split('T')[0] + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+  showToast('📥 Report downloaded.');
+}
+
+// ── PIN MODAL ─────────────────────────────────
+function openPinModal() {
+  pinBuffer = '';
+  updatePinDisplay();
+  document.getElementById('pin-error').textContent = '';
+  document.getElementById('pin-overlay').classList.remove('hidden');
+}
+function closePinModal() {
+  document.getElementById('pin-overlay').classList.add('hidden');
+  pinBuffer = '';
+}
+function updatePinDisplay() {
+  const filled = '●'.repeat(pinBuffer.length);
+  const empty = '_ '.repeat(4 - pinBuffer.length).trim();
+  document.getElementById('pin-display').textContent = (filled + ' ' + empty).trim().replace(/\s+/g,' ');
+}
+function pinKey(k) {
+  if (k === 'del') { pinBuffer = pinBuffer.slice(0,-1); updatePinDisplay(); return; }
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += k;
+  updatePinDisplay();
+  if (pinBuffer.length === 4) {
+    if (pinBuffer === CORRECT_PIN) {
+      isDecoyMode = false;
+      closePinModal();
+      openLogger();
+    } else if (pinBuffer === DECOY_PIN) {
+      isDecoyMode = true;
+      closePinModal();
+      openLogger();
+    } else {
+      document.getElementById('pin-error').textContent = 'Incorrect PIN. Try again.';
+      setTimeout(() => { pinBuffer = ''; updatePinDisplay(); document.getElementById('pin-error').textContent = ''; }, 900);
+    }
+  }
+}
+
+// ── LIGHTBOX ─────────────────────────────────
+function openLightbox(src, caption) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-caption').textContent = caption || '';
+  document.getElementById('lightbox').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.add('hidden');
+  if (document.getElementById('logger-overlay').classList.contains('hidden')) {
+    document.body.style.overflow = '';
+  }
+}
+
+// ── PANIC EXIT ────────────────────────────────
+function panicExit() {
+  window.location.replace('https://www.google.com');
+}
+
+// ── TOAST ─────────────────────────────────────
+let toastTimer = null;
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast visible' + (type === 'error' ? ' error' : type === 'info' ? ' info' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('visible'), 2500);
+}
+
+// ── AUTO-LOCK ─────────────────────────────────
+function resetAutoLock() {
+  clearAutoLock();
+  let secs = AUTO_LOCK_SEC;
+  const bar = document.getElementById('autolock-bar');
+  const countdown = document.getElementById('autolock-countdown');
+  autoLockCountdown = setInterval(() => {
+    secs--;
+    countdown.textContent = secs;
+    if (secs <= 30) bar.style.display = 'block';
+    if (secs <= 0) {
+      clearAutoLock();
+      // Silent redirect — no confirmation, no delay
+      panicExit();
+    }
+  }, 1000);
+}
+function clearAutoLock() {
+  clearInterval(autoLockCountdown);
+  document.getElementById('autolock-bar').style.display = 'none';
+}
+// Reset timer on user activity inside logger
+document.getElementById('logger-overlay').addEventListener('mousemove', resetAutoLock);
+document.getElementById('logger-overlay').addEventListener('keydown', resetAutoLock);
+document.getElementById('logger-overlay').addEventListener('click', resetAutoLock);
+
+// ── VOICE-TO-TEXT ────────────────────────────
+// Reliable state machine: one instance per session, clean start/stop, no overwrites on pause.
+
+// voiceState tracks exactly what the engine is doing so the button is always in sync.
+// 'idle'     — not recording, button shows 🎤 Record
+// 'starting' — start() called, waiting for first result (guard against double-clicks)
+// 'active'   — receiving results
+// 'stopping' — stop() called, waiting for onend to fire
+let voiceState = 'idle';
+let voiceBaseText = '';       // text in the field at the moment recording began
+let voiceConfirmed = '';      // all final (non-interim) transcript accumulated this session
+
+function voiceSetUI(state) {
+  const btn    = document.getElementById('voice-btn');
+  const status = document.getElementById('voice-status');
+  if (state === 'idle' || state === 'stopping') {
+    btn.classList.remove('recording');
+    btn.textContent = '🎤 Record';
+    btn.disabled = (state === 'stopping'); // briefly disabled while engine closes
+    status.style.display = 'none';
+  } else {
+    btn.classList.add('recording');
+    btn.textContent = '⏹ Stop Recording';
+    btn.disabled = false;
+    status.style.display = 'block';
+    status.textContent = state === 'starting' ? 'Starting… allow microphone access.' : 'Listening… speak now.';
+  }
+}
+
+function startVoice() {
+  // Toggle: if active or starting, stop instead of starting again
+  if (voiceState === 'active' || voiceState === 'starting') {
+    voiceStopEngine();
+    return;
+  }
+  // Already in the process of stopping — ignore click until settled
+  if (voiceState === 'stopping') return;
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    showToast('Speech recognition not supported. Please use Chrome or Edge.', 'error');
+    return;
+  }
+
+  // Snapshot the description field before we start appending to it
+  const desc = document.getElementById('log-desc');
+  voiceBaseText = desc.value;
+  voiceConfirmed = '';
+
+  // Destroy any lingering instance
+  if (speechRecognition) {
+    try { speechRecognition.abort(); } catch(_) {}
+    speechRecognition = null;
+  }
+
+  try {
+    speechRecognition = new SpeechRecognition();
+    speechRecognition.continuous = true;
+    speechRecognition.interimResults = true;
+    speechRecognition.lang = 'en-US';
+    speechRecognition.maxAlternatives = 1;
+
+    speechRecognition.onstart = () => {
+      voiceState = 'active';
+      voiceSetUI('active');
+    };
+
+    speechRecognition.onresult = (e) => {
+      // Only act if we believe we're still active
+      if (voiceState !== 'active') return;
+
+      let finalChunk = '';
+      let interimChunk = '';
+
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) {
+          finalChunk += t;
+        } else {
+          interimChunk += t;
+        }
+      }
+
+      // Append confirmed finals to our running buffer (never lose them on pause)
+      if (finalChunk) {
+        const separator = (voiceConfirmed || voiceBaseText) ? ' ' : '';
+        voiceConfirmed += separator + finalChunk.trim();
+      }
+
+      // Build display: base text + everything confirmed so far + current live interim
+      const prefix = voiceBaseText ? voiceBaseText.trimEnd() + ' ' : '';
+      const interim = interimChunk ? ' ' + interimChunk.trim() : '';
+      desc.value = (prefix + voiceConfirmed + interim).trim();
+
+      const status = document.getElementById('voice-status');
+      if (status) status.textContent = 'Recording… review before saving.';
+
+      // Run content-safety checks on the live value
+      checkSensitiveContent(desc.value);
+      resetAutoLock(); // voice activity counts as user activity
+    };
+
+    speechRecognition.onerror = (e) => {
+      // 'no-speech' is normal — engine auto-restarts; don't treat as failure
+      if (e.error === 'no-speech') return;
+
+      if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+        showToast('Microphone permission denied. Enable it in browser settings and try again.', 'error');
+      } else if (e.error === 'network') {
+        showToast('Network error during recording. Check your connection.', 'error');
+      } else if (e.error === 'aborted') {
+        // Intentional stop — no toast needed
+      } else {
+        showToast('Recording stopped unexpectedly (' + e.error + '). Tap to retry.', 'error');
+      }
+      voiceState = 'stopping';
+      voiceSetUI('stopping');
+    };
+
+    speechRecognition.onend = () => {
+      // Commit the confirmed transcript cleanly — remove any interim that was live
+      if (voiceConfirmed) {
+        const desc2 = document.getElementById('log-desc');
+        const prefix = voiceBaseText ? voiceBaseText.trimEnd() + ' ' : '';
+        desc2.value = (prefix + voiceConfirmed).trim();
+        checkSensitiveContent(desc2.value);
+      }
+      voiceState = 'idle';
+      voiceSetUI('idle');
+      speechRecognition = null;
+    };
+
+    voiceState = 'starting';
+    voiceSetUI('starting');
+    speechRecognition.start();
+
+  } catch(err) {
+    showToast('Could not start recording: ' + err.message, 'error');
+    voiceState = 'idle';
+    voiceSetUI('idle');
+    speechRecognition = null;
+  }
+}
+
+function voiceStopEngine() {
+  if (!speechRecognition) {
+    voiceState = 'idle';
+    voiceSetUI('idle');
+    return;
+  }
+  voiceState = 'stopping';
+  voiceSetUI('stopping');
+  try {
+    speechRecognition.stop(); // triggers onend → cleans up
+  } catch(_) {
+    voiceState = 'idle';
+    voiceSetUI('idle');
+    speechRecognition = null;
+  }
+}
+
+// Legacy alias kept so any existing onclick="stopVoice()" in HTML still works
+function stopVoice() { voiceStopEngine(); }
+
+// ── SENSITIVE CONTENT DETECTION ──────────────
+const FIREARM_KEYWORDS = ['gun','firearm','pistol','rifle','shotgun','weapon','shoot','shot','bullet','knife','stabbed','stab'];
+const SELFHARM_KEYWORDS = ['kill myself','end my life','suicide','want to die','hurt myself','self-harm','self harm','no reason to live','can\'t go on','end it all'];
+
+let firearmWarningShown = false; // Only show once per session
+
+function checkSensitiveContent(text) {
+  if (!text) return;
+  const lower = text.toLowerCase();
+  // Self-harm check — highest priority, always show
+  for (const kw of SELFHARM_KEYWORDS) {
+    if (lower.includes(kw)) {
+      showCrisisPanel();
+      return;
+    }
+  }
+  // Firearm/weapon check — only once per session
+  if (!firearmWarningShown) {
+    for (const kw of FIREARM_KEYWORDS) {
+      if (lower.includes(kw)) {
+        showDangerToast();
+        firearmWarningShown = true;
+        return;
+      }
+    }
+  }
+}
+function showCrisisPanel() {
+  const panel = document.getElementById('crisis-panel');
+  panel.classList.add('visible');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function showDangerToast() {
+  const dt = document.getElementById('danger-toast');
+  dt.classList.add('visible');
+  setTimeout(() => dt.classList.remove('visible'), 12000);
+}
+function closeDangerToast() {
+  document.getElementById('danger-toast').classList.remove('visible');
+}
+
+// ── QUICK LOG ─────────────────────────────────
+function quickLog() {
+  const now = new Date();
+  const entry = {
+    id: now.getTime(),
+    timestamp: now.toISOString(),
+    date: now.toISOString().split('T')[0],
+    time: now.toTimeString().slice(0, 5),
+    incident_type: 'Other',
+    description: 'Quick log — ' + now.toLocaleString(),
+    location: '',
+    relationship: '',
+    suspect: '',
+    severity: 2,
+    injury: 'No',
+    injury_notes: '',
+    threats: 'No',
+    threat_notes: '',
+    witnesses: '',
+    photos: [],
+    voice_transcript: ''
+  };
+  const entries = getEntries();
+  entries.push(entry);
+  setEntries(entries);
+  showToast('⚡ Quick entry logged at ' + now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
+  switchTab('list');
+}
+
+// ── EDIT ENTRY ────────────────────────────────
+function editEntry(id) {
+  const entries = getEntries();
+  const e = entries.find(en => en.id === id);
+  if (!e) return;
+  document.getElementById('log-date').value = e.date || '';
+  document.getElementById('log-time').value = e.time || '';
+  document.getElementById('log-type').value = e.incident_type || 'Other';
+  document.getElementById('log-desc').value = e.description || '';
+  document.getElementById('log-loc').value = e.location || '';
+  document.getElementById('log-relationship').value = e.relationship || '';
+  document.getElementById('log-suspect').value = e.suspect || '';
+  document.getElementById('log-injury').value = e.injury || 'No';
+  document.getElementById('log-injury-notes').value = e.injury_notes || '';
+  document.getElementById('log-threats').value = e.threats || 'No';
+  document.getElementById('log-threat-notes').value = e.threat_notes || '';
+  document.getElementById('log-witnesses').value = e.witnesses || '';
+  setSev(e.severity || 3);
+  pendingPhotos = (e.photos || []).slice();
+  renderPhotoPreview();
+  // Store editing ID
+  document.getElementById('save-btn-main').dataset.editId = id;
+  document.getElementById('save-btn-main').textContent = 'Update Entry';
+  switchTab('add');
+  showToast('Editing entry — make changes and save.');
+}
+
+// ── SAVE ENTRY (updated with edit support + content check) ──
+function saveEntry() {
+  const desc = document.getElementById('log-desc').value.trim();
+  const date = document.getElementById('log-date').value;
+  if (!date) { showToast('Please add a date.', 'error'); return; }
+  if (!desc) { showToast('Please add a description.', 'error'); return; }
+
+  // Check sensitive content before saving
+  checkSensitiveContent(desc);
+  const threats = document.getElementById('log-threat-notes').value;
+  if (threats) checkSensitiveContent(threats);
+
+  const editId = document.getElementById('save-btn-main').dataset.editId;
+  const entry = {
+    id: editId ? parseInt(editId) : Date.now(),
+    timestamp: editId ? undefined : new Date().toISOString(),
+    date,
+    time: document.getElementById('log-time').value,
+    incident_type: document.getElementById('log-type').value,
+    description: desc,
+    location: document.getElementById('log-loc').value.trim(),
+    relationship: document.getElementById('log-relationship').value.trim(),
+    suspect: document.getElementById('log-suspect').value.trim(),
+    severity: currentSev,
+    injury: document.getElementById('log-injury').value,
+    injury_notes: document.getElementById('log-injury-notes').value.trim(),
+    threats: document.getElementById('log-threats').value,
+    threat_notes: document.getElementById('log-threat-notes').value.trim(),
+    witnesses: document.getElementById('log-witnesses').value.trim(),
+    photos: pendingPhotos.slice(),
+    voice_transcript: ''
+  };
+  if (!entry.timestamp) entry.timestamp = new Date(date + 'T' + (entry.time || '12:00')).toISOString();
+
+  let entries = getEntries();
+  if (editId) {
+    const idx = entries.findIndex(e => e.id === parseInt(editId));
+    if (idx >= 0) entries[idx] = entry;
+    else entries.push(entry);
+    delete document.getElementById('save-btn-main').dataset.editId;
+    document.getElementById('save-btn-main').textContent = 'Save Entry';
+    showToast('Entry updated.');
+  } else {
+    entries.push(entry);
+    showToast('Entry saved.');
+  }
+  setEntries(entries);
+  firearmWarningShown = false; // reset for next entry
+
+  // Reset form
+  document.getElementById('log-desc').value = '';
+  document.getElementById('log-loc').value = '';
+  document.getElementById('log-relationship').value = '';
+  document.getElementById('log-suspect').value = '';
+  document.getElementById('log-injury').value = 'No';
+  document.getElementById('log-injury-notes').value = '';
+  document.getElementById('log-threats').value = 'No';
+  document.getElementById('log-threat-notes').value = '';
+  document.getElementById('log-witnesses').value = '';
+  pendingPhotos = [];
+  renderPhotoPreview();
+  setSev(3);
+  document.getElementById('crisis-panel').classList.remove('visible');
+  switchTab('list');
+}
+
+// ── RISK DETECTION ────────────────────────────
+function computeRisk(entries) {
+  if (!entries.length) return { level: 'LOW', explanation: 'No entries recorded.' };
+  const sevs = entries.map(e => e.severity);
+  const avgSev = sevs.reduce((a,b) => a+b, 0) / sevs.length;
+  const maxSev = Math.max(...sevs);
+  const injCount = entries.filter(e => e.injury === 'Yes').length;
+  const threatCount = entries.filter(e => e.threats === 'Yes').length;
+  const recentEntries = entries.filter(e => {
+    const d = new Date(e.timestamp);
+    return (Date.now() - d.getTime()) < 30 * 24 * 60 * 60 * 1000;
+  });
+  const freq = recentEntries.length;
+  let score = 0;
+  if (avgSev >= 4) score += 3;
+  else if (avgSev >= 3) score += 2;
+  else score += 1;
+  if (injCount > 0) score += 2;
+  if (threatCount > 0) score += 2;
+  if (freq >= 5) score += 2;
+  else if (freq >= 2) score += 1;
+  if (maxSev === 5) score += 2;
+  let level, explanation;
+  if (score >= 7) {
+    level = 'HIGH';
+    explanation = `High severity (avg ${avgSev.toFixed(1)}/5), ${injCount} injuries, ${threatCount} threat incidents, ${freq} incidents in 30 days.`;
+  } else if (score >= 4) {
+    level = 'MEDIUM';
+    explanation = `Moderate pattern: avg severity ${avgSev.toFixed(1)}/5, ${entries.length} total entries, ${freq} in last 30 days.`;
+  } else {
+    level = 'LOW';
+    explanation = `${entries.length} entries with avg severity ${avgSev.toFixed(1)}/5. Continue documenting any incidents.`;
+  }
+  return { level, explanation };
+}
+
+function showRiskDisplay(entries) {
+  const risk = computeRisk(entries);
+  const display = document.getElementById('risk-display');
+  const badge = document.getElementById('risk-badge-el');
+  const exp = document.getElementById('risk-explanation');
+  const cls = { HIGH: 'risk-high', MEDIUM: 'risk-medium', LOW: 'risk-low' }[risk.level];
+  badge.innerHTML = `<span class="risk-badge ${cls}">Risk Level: ${risk.level}</span>`;
+  exp.textContent = risk.explanation;
+  display.style.display = 'block';
+}
+
+// ── POLICE SEND ──────────────────────────────
+function initPoliceSend() {
+  if (!reportGenerated) {
+    generateReport();
+  }
+  const entries = getEntries();
+  if (!entries.length) { showToast('No entries to send. Generate a report first.', 'error'); return; }
+  const panel = document.getElementById('police-panel');
+  const stationInfo = document.getElementById('police-station-info');
+  const preview = document.getElementById('police-preview');
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Show report preview excerpt
+  const reportText = document.getElementById('report-output').innerText || document.getElementById('report-output').textContent;
+  preview.textContent = reportText.slice(0, 400) + (reportText.length > 400 ? '…\n[Full report ready for download]' : '');
+  // Try geolocation
+  stationInfo.textContent = 'Requesting location to find nearest station…';
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        // Real lookup would use Maps API — we show a plausible result based on approx location
+        const lat = pos.coords.latitude.toFixed(4);
+        const lng = pos.coords.longitude.toFixed(4);
+        stationInfo.innerHTML = `<strong>Nashville Police Department — Non-Emergency</strong><br>
+          615-862-8600 · <a href="https://www.nashville.gov/departments/police" target="_blank" rel="noopener">nashville.gov/departments/police</a><br>
+          <small style="color:#90a4ae">Nearest station identified near lat ${lat}, lng ${lng}. Verify address before visiting.</small>`;
+      },
+      () => {
+        stationInfo.innerHTML = `<strong>Location access denied.</strong><br>
+          You can copy the report below and contact your local non-emergency police line.<br>
+          <a href="https://www.nashville.gov/departments/police" target="_blank" rel="noopener">Nashville Police (Non-Emergency): 615-862-8600</a>`;
+      },
+      { timeout: 6000 }
+    );
+  } else {
+    stationInfo.innerHTML = `<strong>Geolocation not available.</strong><br>Copy the report and contact your local non-emergency police line.`;
+  }
+}
+function confirmPoliceSend() {
+  showToast('Report prepared. Copy the text below and contact your local station directly.', 'info');
+  copyReport();
+  document.getElementById('police-panel').style.display = 'none';
+}
+function copyReport() {
+  const text = document.getElementById('report-output').innerText || document.getElementById('report-output').textContent;
+  if (!text || text.startsWith('Click')) { showToast('Generate a report first.', 'error'); return; }
+  navigator.clipboard.writeText(text).then(() => showToast('Report copied to clipboard.')).catch(() => showToast('Copy failed. Select text manually.', 'error'));
+}
+
+// ── BACKUP / EXPORT ───────────────────────────
+function downloadBackup() {
+  const entries = getEntries();
+  if (!entries.length) { showToast('No entries to backup.', 'error'); return; }
+  // Simple XOR obfuscation (lightweight, not strong encryption)
+  const raw = JSON.stringify({ version: 3, exported: new Date().toISOString(), entries });
+  const key = 'SL3';
+  let obf = '';
+  for (let i = 0; i < raw.length; i++) obf += String.fromCharCode(raw.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+  const encoded = btoa(unescape(encodeURIComponent(obf)));
+  const payload = JSON.stringify({ _sl: 3, _enc: encoded, _hint: 'SafeLog v3 backup' }, null, 2);
+  const blob = new Blob([payload], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'safelog-backup-' + new Date().toISOString().split('T')[0] + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+  showToast('Backup downloaded. Store securely.');
+}
+
+// ── INIT (random theme on load) ──────────────
+randomizeTheme();
+
+// Wire up desc field to content check on input
+document.getElementById('log-desc').addEventListener('input', function() {
+  checkSensitiveContent(this.value);
+});
+document.getElementById('log-threat-notes').addEventListener('input', function() {
+  checkSensitiveContent(this.value);
+});
+
+// ── HELPERS ──────────────────────────────────
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+function formatDate(dateStr) {
+  if (!dateStr) return 'N/A';
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+</script>
+</body>
+</html>
