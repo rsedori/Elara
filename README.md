@@ -1,6 +1,7 @@
 # Elara
 
 A Discreet, Privacy-First Incident Logging Platform
+
 "A Place to be Heard"
 
 ## Overview
