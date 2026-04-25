@@ -10,7 +10,7 @@ Live Demo: https://rsedori.github.io/Elara/
 
 Elara is a privacy-first web application designed to help individuals safely document sensitive personal incidents in environments where visibility and security are critical concerns.
 
-This project was developed as part of the **Anthropic-sponsored hackathon hosted by Vanderbilt’s Claude Builder’s Club**, with a focus on building responsible, safety-aware technology using modern AI tools.
+This project was developed as part of the **Anthropic-sponsored hackathon hosted by Vanderbilt’s Claude Builder’s Club**, focusing on building responsible, safety-aware technology using modern AI tools within a 6-hour time frame.
 
 Elara operates behind a **disguised interface**, appearing as a normal, everyday website such as a grocery store, encyclopedia page, legal document portal, or fitness tracker. Beneath this surface, it provides a hidden, structured system for logging incidents, organizing evidence, and generating formal reports.
 
@@ -56,7 +56,7 @@ Users can attach images to individual entries to support documentation, such as 
 
 ### Automatic Session Timeout
 
-To protect user safety, Elara automatically exits after a period of inactivity. If no interaction is detected, the session is closed and the user is redirected to a neutral external site. This helps reduce the risk of exposure if the device is left unattended.
+To protect user safety, Elara automatically exits after a period of inactivity. If no interaction is detected, the session is closed, and the user is redirected to a neutral external site. This helps reduce the risk of exposure if the device is left unattended.
 
 ---
 
