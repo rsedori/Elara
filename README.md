@@ -4,7 +4,7 @@ A Discreet, Privacy-First Incident Logging Platform
 
 "A Place to be Heard"
 
-Live Demo: https://rsedori.github.io/elara/
+Live Demo: https://rsedori.github.io/Elara/
 
 ## Overview
 
