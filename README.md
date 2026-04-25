@@ -4,6 +4,8 @@ A Discreet, Privacy-First Incident Logging Platform
 
 "A Place to be Heard"
 
+Live Demo: https://rsedori.github.io/elara/
+
 ## Overview
 
 Elara is a privacy-first web application designed to help individuals safely document sensitive personal incidents in environments where visibility and security are critical concerns.
